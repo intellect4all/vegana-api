@@ -1,0 +1,296 @@
+{% load static %}
+
+<nav class="navbar-part">
+    <div class="container">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="navbar-element">
+            <ul class="left-widget">
+              <li>
+                <a class="icon icon-inline menu-bar" href="#"
+                  ><i class="fas fa-align-left"></i
+                ></a>
+              </li>
+            </ul>
+            <a class="navbar-logo" href="#">
+              <img src="{% static 'assets/images/logo/01.png' %}" alt="logo" />
+            </a>
+            <form class="search-form navbar-src">
+              <input type="text" placeholder="Search anything..." />
+              <button class="btn btn-inline">
+                <i class="fas fa-search"></i> <span>search</span>
+              </button>
+            </form>
+            <ul class="right-widget">
+              <li>
+                <a class="icon icon-inline" href="singles/signin-up.html"
+                  ><i class="fas fa-user"></i
+                ></a>
+              </li>
+              <li>
+                <a class="icon icon-inline" href="singles/wishlist.html"
+                  ><i class="fas fa-heart"></i><sup>0</sup></a
+                >
+              </li>
+              <li>
+                <a class="icon icon-inline" href="singles/cartlist.html"
+                  ><i class="fas fa-shopping-cart"></i><sup>0</sup></a
+                >
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="navbar-slide">
+            <div class="navbar-content">
+              <div class="navbar-slide-cross">
+                <a class="icon icon-inline cross-btn" href="#"
+                  ><i class="fas fa-times"></i
+                ></a>
+              </div>
+              <div class="navbar-slide-logo">
+                <a href="#"
+                  ><img src="{% static 'assets/images/logo/01.png' %}" alt="logo"
+                /></a>
+              </div>
+              <form class="search-form mb-4 navbar-slide-src">
+                <input type="text" placeholder="Search anything..." />
+                <button class="btn btn-inline">
+                  <i class="fas fa-search"></i> <span>search</span>
+                </button>
+              </form>
+              <ul class="navbar-list">
+                <li class="navbar-item active">
+                  <a class="navbar-link" href="home-1.html">Home</a>
+                </li>
+                <li class="navbar-item navbar-dropdown navbar-megamenu">
+                  <a class="navbar-link dropdown-indicator" href="#">
+                    <span>Categories</span>
+                    <i class="fas fa-chevron-down"></i>
+                  </a>
+                  <div class="megamenu">
+                    <ul>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-groceries"></i>
+                          <span>Groceries (17)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-bread"></i>
+                          <span>bakery (23)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-vegetable"></i>
+                          <span>vegetables (42)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-healthy-food"></i>
+                          <span>fruits (14)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-salad"></i>
+                          <span>salads (21)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-drinks"></i>
+                          <span>drinks (36)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-seaweed"></i>
+                          <span>seaweeds (14)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-nuts"></i>
+                          <span>nuts (22)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-marmite"></i>
+                          <span>Nutrition (18)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-cereal"></i>
+                          <span>cereal (54)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-tofu"></i>
+                          <span>tofu (17)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-peas"></i>
+                          <span>Legumes (43)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-spread"></i>
+                          <span>Seeds (36)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-cheese"></i>
+                          <span>cheeses (68)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-milk"></i>
+                          <span>Plant Milks (45)</span></a
+                        >
+                      </li>
+                      <li>
+                        <a href="#"
+                          ><i class="flaticon-cereal"></i>
+                          <span>cereal (23)</span></a
+                        >
+                      </li>
+                    </ul>
+                  </div>
+                </li>
+                <li class="navbar-item navbar-dropdown">
+                  <a class="navbar-link dropdown-indicator" href="#">
+                    <span>Shop</span> <i class="fas fa-chevron-down"></i>
+                  </a>
+                  <ul class="dropdown-list">
+                    <li>
+                      <a
+                        class="dropdown-link"
+                        href="singles/shop-leftbar.html"
+                        >Shop with leftbar</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-link"
+                        href="singles/shop-rightbar.html"
+                        >Shop with rightbar</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-link"
+                        href="singles/shop-fullwidth.html"
+                        >Shop fullwidth</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-link"
+                        href="singles/product-details.html"
+                        >Product details</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li class="navbar-item navbar-dropdown">
+                  <a class="navbar-link dropdown-indicator" href="#">
+                    <span>pages</span> <i class="fas fa-chevron-down"></i>
+                  </a>
+                  <ul class="dropdown-list">
+                    <li>
+                      <a class="dropdown-link" href="singles/cartlist.html"
+                        >Cartlist</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-link" href="singles/wishlist.html"
+                        >Wisthlist</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-link" href="singles/checkout.html"
+                        >Checkout</a
+                      >
+                    </li>
+                    <li>
+                      <a class="dropdown-link" href="singles/signin-up.html"
+                        >Login or Register</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li class="navbar-item navbar-dropdown">
+                  <a class="navbar-link dropdown-indicator" href="#">
+                    <span>blogs</span> <i class="fas fa-chevron-down"></i>
+                  </a>
+                  <ul class="dropdown-list">
+                    <li>
+                      <a class="dropdown-link" href="singles/blog-list.html"
+                        >Blog List</a
+                      >
+                    </li>
+                    <li>
+                      <a
+                        class="dropdown-link"
+                        href="singles/blog-details.html"
+                        >blog details</a
+                      >
+                    </li>
+                  </ul>
+                </li>
+                <li class="navbar-item">
+                  <a class="navbar-link" href="singles/account.html"
+                    >Account</a
+                  >
+                </li>
+                <li class="navbar-item">
+                  <a class="navbar-link" href="singles/contact.html"
+                    >contact</a
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <div class="btmbar-part">
+    <ul class="btmbar-widget">
+      <li>
+        <a href="home-1.html">
+          <i class="fas fa-home"></i> <span>Home</span>
+        </a>
+      </li>
+      <li>
+        <a href="singles/wishlist.html" class="wish-icon">
+          <i class="fas fa-heart"></i> <span>Wishlist</span> <sup>0</sup>
+        </a>
+      </li>
+      <li>
+        <a href="singles/cartlist.html" class="cart-icon">
+          <i class="fas fa-shopping-basket"></i> <span>Cart</span>
+          <sup>0</sup>
+        </a>
+      </li>
+      <li>
+        <a href="singles/account.html">
+          <i class="fas fa-cog"></i> <span>Settings</span>
+        </a>
+      </li>
+    </ul>
+  </div>
