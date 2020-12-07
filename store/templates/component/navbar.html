@@ -1,5 +1,6 @@
 {% load static %}
 
+
 <nav class="navbar-part">
     <div class="container">
       <div class="row">
@@ -63,7 +64,7 @@
               </form>
               <ul class="navbar-list">
                 <li class="navbar-item active">
-                  <a class="navbar-link" href="home-1.html">Home</a>
+                  <a class="navbar-link" href="{% url 'store:home' %}">Home</a>
                 </li>
                 <li class="navbar-item navbar-dropdown navbar-megamenu">
                   <a class="navbar-link dropdown-indicator" href="#">
@@ -72,13 +73,15 @@
                   </a>
                   <div class="megamenu">
                     <ul>
+                      {% for category in all_categories %}
                       <li>
-                        <a href="#"
+                        <a href="{% url 'store:category' category.name %}"
                           ><i class="flaticon-groceries"></i>
-                          <span>Groceries (17)</span></a
+                          <span>{{category.name}} ({{category.product_set.count}})</span></a
                         >
                       </li>
-                      <li>
+                      {% endfor %}
+                      <!-- <li>
                         <a href="#"
                           ><i class="flaticon-bread"></i>
                           <span>bakery (23)</span></a
@@ -167,7 +170,7 @@
                           ><i class="flaticon-cereal"></i>
                           <span>cereal (23)</span></a
                         >
-                      </li>
+                      </li> -->
                     </ul>
                   </div>
                 </li>
