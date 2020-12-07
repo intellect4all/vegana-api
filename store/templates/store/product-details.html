@@ -64,7 +64,7 @@
               <ul>
                 <li><input type="number" placeholder="0" /></li>
                 <li>
-                  <a href="#" class="btn btn-outline">
+                  <a href="{% url 'store:add-to-cart' product.slug %}" class="btn btn-outline">
                     <i class="fas fa-shopping-basket"></i>
                     <span>add to cart</span>
                   </a>
@@ -96,14 +96,14 @@
                 <li>
                   <a href="#"
                     ><img
-                      src="../assets/images/pay-card/03.jpg"
+                      src="{% static 'assets/images/pay-card/03.jpg' %}"
                       alt="payment-3"
                   /></a>
                 </li>
                 <li>
                   <a href="#"
                     ><img
-                      src="../assets/images/pay-card/04.jpg"
+                      src="{% static 'assets/images/pay-card/04.jpg' %}"
                       alt="payment-4"
                   /></a>
                 </li>

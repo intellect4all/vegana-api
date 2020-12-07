@@ -1,5 +1,5 @@
 {% load static %}
-
+{% load orderitem_count %}
 
 <nav class="navbar-part">
     <div class="container">
@@ -34,8 +34,8 @@
                 >
               </li>
               <li>
-                <a class="icon icon-inline" href="singles/cartlist.html"
-                  ><i class="fas fa-shopping-cart"></i><sup>0</sup></a
+                <a class="icon icon-inline" href="{% url 'store:cart' %}"
+                  ><i class="fas fa-shopping-cart"></i><sup>{% if request.user.is_authenticated %} {{ request.user|cart_item_count}}{% endif %}</sup></a
                 >
               </li>
             </ul>

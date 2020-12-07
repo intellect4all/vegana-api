@@ -28,4 +28,20 @@ class TagAdmin(admin.ModelAdmin):
     verbose_name_plural = 'Tags'
 
 
+@admin.register(OrderItem)
+class OrderItemAdmin(admin.ModelAdmin):
+    '''Admin View for OrderItem'''
+    list_display = ('user', 'ordered', 'product', 'quantity')
+    list_filter = ('ordered',)
+    search_fields = ('user',)
+    
+@admin.register(Order)
+class OrderAdmin(admin.ModelAdmin):
+    '''Admin View for Order'''
+    list_display = ('user', 'ordered')
+    list_filter = ('ordered',)
+    search_fields = ('user',)
+    
+
+
 # Register your models here.
