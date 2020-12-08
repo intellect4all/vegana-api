@@ -1,4 +1,5 @@
 
+from django.contrib.auth import login
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 # from django.template import context
@@ -81,49 +82,89 @@ def add_to_cart(request, slug):
         return redirect('store:home')
 
 
+@login_required
 def Cart(request):
+    all_categories = Category.objects.all()
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
         order_items = order.items.all()
         context = {
             'order_items': order_items,
+            'all_categories': all_categories,
         }
         return render(request, 'store/cartlist.html', context)
     else:
         messages.info(request, "You do not have an active order")
         return redirect('store:home')
 
-
+@login_required
 def add_to_wishlist(request, slug):
     product = get_object_or_404(Product, slug=slug, is_on_sale=True)
-    order_item, created = OrderItem.objects.get_or_create(user=request.user, product=product, ordered=False)
+    wish_item, created = WishItem.objects.get_or_create(user=request.user, product=product, ordered=False)
     wishlist_qs = Wishlist.objects.filter(user=request.user, ordered=False)
     if wishlist_qs.exists():
         wishlist = wishlist_qs[0]
-        if wishlist.items.filter(product__slug=slug).exists:
-            messages.info(request, f'{order_item.product.name} already exists in your wishlist.')
+        if wishlist.items.filter(product__slug=slug).exists():
+            messages.info(request, f'{wish_item.product.name} already exists in your wishlist.')
             return redirect('store:home')
         else:
-            wishlist.items.add(order_item)
-            messages.info(request, f'{order_item.product.name} has been added to your wishlist.')
+            wishlist.items.add(wish_item)
+            messages.info(request, f'{wish_item.product.name} has been added to your wishlist.')
             return redirect('store:home')
     else:
         ordered_date = timezone.now()
         wishlist = Wishlist.objects.create(user=request.user, ordered_date=ordered_date)
-        wishlist.items.add(order_item)
-        messages.info(request, f'{order_item.product.name} has been added to your wishlist.')
+        wishlist.items.add(wish_item)
+        messages.info(request, f'{wish_item.product.name} has been added to your wishlist.')
         return redirect('store:home')
-        
+
+@login_required
 def wishlist(request):
+    all_categories = Category.objects.all()
     wishlist_qs = Wishlist.objects.filter(user=request.user, ordered=False)
     if wishlist_qs.exists():
         wishlist = wishlist_qs[0]
         wishlist_items = wishlist.items.all()
         context = {
             'wishlist': wishlist_items,
+            'all_categories': all_categories,
         }
         return render(request, 'store/wishlist.html', context)
     else:
         messages.info(request, "You do not have a wishlist. Kindly add a product to your wishlist")
         return redirect('store:home')
+
+@login_required
+def add_wishlist_to_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug, is_on_sale=True)
+    order_item, created = OrderItem.objects.get_or_create(user=request.user, product=product, ordered=False)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    wish_item, created = WishItem.objects.get_or_create(user=request.user, product=product, ordered=False)
+    wishlist_qs = Wishlist.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.items.filter(product__slug=product.slug).exists():
+            order_item.quantity += 1
+            order_item.save()
+            wishlist = wishlist_qs[0]
+            wishlist.items.remove(wish_item)
+            msg = product.name + " already exists in your cart. The quantity has been incremented and removed from your cart."
+            messages.info(request, msg)
+            return redirect('store:wishlist', slug=slug)
+        else:
+            order.items.add(order_item)
+            wishlist = wishlist_qs[0]
+            wishlist.items.remove(wish_item)
+            msg = product.name + " has been added to your cart and removed from your wishlist."
+            messages.info(request, msg)
+            return redirect('store:wishlist')
+    else:
+        ordered_date = timezone.now()
+        order = Order.objects.create(user=request.user, ordered_date=ordered_date)
+        order.items.add(order_item)
+        wishlist = wishlist_qs[0]
+        wishlist.items.remove(wish_item)
+        msg = product.name + " has been added to your cart and removed from your wishlist."
+        messages.info(request, msg)
+        return redirect('store:wishlist')

@@ -146,5 +146,8 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+ACCOUNT_UNIQUE_EMAIL = True
 
+ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 
+ACCOUNT_SESSION_REMEMBER = None
