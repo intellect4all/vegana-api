@@ -54,7 +54,7 @@ def CategoryView(request, category):
 
 @login_required
 def add_to_cart(request, slug):
-    product = Product.objects.get(slug=slug)
+    product = get_object_or_404(Product, slug=slug, is_on_sale=True)
     order_item, created = OrderItem.objects.get_or_create(
         user=request.user, product=product, ordered=False)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
@@ -96,4 +96,34 @@ def Cart(request):
 
 
 def add_to_wishlist(request, slug):
-    pass
+    product = get_object_or_404(Product, slug=slug, is_on_sale=True)
+    order_item, created = OrderItem.objects.get_or_create(user=request.user, product=product, ordered=False)
+    wishlist_qs = Wishlist.objects.filter(user=request.user, ordered=False)
+    if wishlist_qs.exists():
+        wishlist = wishlist_qs[0]
+        if wishlist.items.filter(product__slug=slug).exists:
+            messages.info(request, f'{order_item.product.name} already exists in your wishlist.')
+            return redirect('store:home')
+        else:
+            wishlist.items.add(order_item)
+            messages.info(request, f'{order_item.product.name} has been added to your wishlist.')
+            return redirect('store:home')
+    else:
+        ordered_date = timezone.now()
+        wishlist = Wishlist.objects.create(user=request.user, ordered_date=ordered_date)
+        wishlist.items.add(order_item)
+        messages.info(request, f'{order_item.product.name} has been added to your wishlist.')
+        return redirect('store:home')
+        
+def wishlist(request):
+    wishlist_qs = Wishlist.objects.filter(user=request.user, ordered=False)
+    if wishlist_qs.exists():
+        wishlist = wishlist_qs[0]
+        wishlist_items = wishlist.items.all()
+        context = {
+            'wishlist': wishlist_items,
+        }
+        return render(request, 'store/wishlist.html', context)
+    else:
+        messages.info(request, "You do not have a wishlist. Kindly add a product to your wishlist")
+        return redirect('store:home')

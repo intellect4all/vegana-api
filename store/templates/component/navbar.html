@@ -29,13 +29,13 @@
                 ></a>
               </li>
               <li>
-                <a class="icon icon-inline" href="singles/wishlist.html"
-                  ><i class="fas fa-heart"></i><sup>0</sup></a
+                <a class="icon icon-inline" href="{% url 'store:wishlist' %}"
+                  ><i class="fas fa-heart"></i><sup>{% if request.user.is_authenticated %} {{ request.user|wishlist_item_count}}{% else%} 0 {% endif %}</sup></a
                 >
               </li>
               <li>
                 <a class="icon icon-inline" href="{% url 'store:cart' %}"
-                  ><i class="fas fa-shopping-cart"></i><sup>{% if request.user.is_authenticated %} {{ request.user|cart_item_count}}{% endif %}</sup></a
+                  ><i class="fas fa-shopping-cart"></i><sup>{% if request.user.is_authenticated %} {{ request.user|cart_item_count}}{% else%} 0 {% endif %}</sup></a
                 >
               </li>
             </ul>

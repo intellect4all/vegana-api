@@ -39,9 +39,13 @@ class OrderItemAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     '''Admin View for Order'''
     list_display = ('user', 'ordered')
-    list_filter = ('ordered',)
+    list_filter = ('ordered',  'date_created')
     search_fields = ('user',)
     
+@admin.register(Wishlist)
+class WishListAdmin(admin.ModelAdmin):
+    '''Admin View for WishList'''
 
-
-# Register your models here.
+    list_display = ('user', 'ordered')
+    list_filter = ('ordered', 'date_created')
+    search_fields = ('user',)

@@ -27,7 +27,7 @@ class Product(models.Model):
     actual_price = models.IntegerField()
     discount_price = models.IntegerField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    tags = models.ManyToManyField(Tag, related_name='tags', null=True, blank=True)
+    tags = models.ManyToManyField(Tag, related_name='tags', blank=True)
     slug = models.SlugField(unique=True, editable=False)
     description = models.TextField(max_length=3000, default="This is an auto generated product description.")
     featured_image = models.ImageField(null=True, blank=True)
@@ -75,6 +75,8 @@ class Order(models.Model):
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
 
+    class Meta:
+        ordering = ['-date_created']
    
 class Wishlist(models.Model):
     user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
@@ -82,3 +84,6 @@ class Wishlist(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['-date_created']

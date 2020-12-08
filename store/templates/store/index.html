@@ -87,10 +87,10 @@
                       <button><a href="{{product.get_absolute_url}}"><i class="fas fa-eye"></i></a></button>
                     </li>
                     <li>
-                      <button><i class="fas fa-heart"></i></button>
+                      <button><a href="{% url 'store:add-to-wishlist' product.slug %}"><i class="fas fa-heart"></i></a></button>
                     </li>
                     <li>
-                      <button><i class="fas fa-exchange-alt"></i></button>
+                      <button><a href="{% url 'store:add-to-cart' product.slug %}"><i class="fas fa-exchange-alt"></i></a></button>
                     </li>
                   </ul>
                 </div>
@@ -150,10 +150,10 @@
                       <button><a href="{{product.get_absolute_url}}"><i class="fas fa-eye"></i></a></button>
                     </li>
                     <li>
-                      <button><i class="fas fa-heart"></i></button>
+                      <button><a href="{% url 'store:add-to-wishlist' product.slug %}"><i class="fas fa-heart"></i></a></button>
                     </li>
                     <li>
-                      <button><i class="fas fa-exchange-alt"></i></button>
+                      <button><a href="{% url 'store:add-to-cart' product.slug %}"><i class="fas fa-exchange-alt"></i></a></button>
                     </li>
                   </ul>
                 </div>
@@ -212,10 +212,10 @@
                       <button><a href="{{product.get_absolute_url}}"><i class="fas fa-eye"></i></a></button>
                     </li>
                     <li>
-                      <button><i class="fas fa-heart"></i></button>
+                      <button><a href="{% url 'store:add-to-wishlist' product.slug %}"><i class="fas fa-heart"></i></a></button>
                     </li>
                     <li>
-                      <button><i class="fas fa-exchange-alt"></i></button>
+                      <button><a href="{% url 'store:add-to-cart' product.slug %}"><i class="fas fa-exchange-alt"></i></a></button>
                     </li>
                   </ul>
                 </div>
