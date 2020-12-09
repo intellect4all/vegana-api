@@ -275,19 +275,19 @@
   <div class="btmbar-part">
     <ul class="btmbar-widget">
       <li>
-        <a href="home-1.html">
+        <a href="{% url 'store:home' %}">
           <i class="fas fa-home"></i> <span>Home</span>
         </a>
       </li>
       <li>
-        <a href="singles/wishlist.html" class="wish-icon">
-          <i class="fas fa-heart"></i> <span>Wishlist</span> <sup>0</sup>
+        <a href="{% url 'store:wishlist' %}" class="wish-icon">
+          <i class="fas fa-heart"></i> <span>Wishlist</span> <sup>{% if request.user.is_authenticated %} {{ request.user|wishlist_item_count}}{% else%} 0 {% endif %}</sup>
         </a>
       </li>
       <li>
-        <a href="singles/cartlist.html" class="cart-icon">
+        <a href="{% url 'store:cart' %}" class="cart-icon">
           <i class="fas fa-shopping-basket"></i> <span>Cart</span>
-          <sup>0</sup>
+          <sup>{% if request.user.is_authenticated %} {{ request.user|cart_item_count}}{% else%} 0 {% endif %}</sup>
         </a>
       </li>
       <li>

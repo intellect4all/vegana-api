@@ -58,11 +58,13 @@
                     <td class="table-name"><h5>{{orderitem.product.name}}</h5></td>
                     <td class="table-price"><h5>#{{orderitem.product.get_price}}</h5></td>
                     <td class="table-quantity">
+                      <a href="{% url 'store:remove-single-from-cart' orderitem.product.slug %}">-</a>
                       <p>{{orderitem.quantity}}</p>
+                      <a href="{% url 'store:add-single-to-cart' orderitem.product.slug %}">+</a>
                     </td>
                     <td class="table-total"><h5>#{{orderitem.get_item_total_price}}</h5></td>
                     <td class="table-action">
-                      <button><i class="fas fa-trash-alt"></i></button>
+                      <a href="{% url 'store:remove-from-cart' orderitem.product.slug %}"><button ><i class="fas fa-trash-alt"></i></button></a>
                     </td>
                   </tr>
                   {% endfor %}
@@ -89,7 +91,7 @@
         <div class="row">
           <div class="col-md-6 col-lg-6">
             <div class="cart-back">
-              <a href="product-list-1.html" class="btn btn-inline">
+              <a href="{% url 'store:home'%}" class="btn btn-inline">
                 <i class="fas fa-undo-alt"></i> <span>Back to Shop</span>
               </a>
             </div>

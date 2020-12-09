@@ -66,7 +66,7 @@ def add_to_cart(request, slug):
             order_item.save()
             msg = product.name + " already exists in your cart. The quantity has been incremented."
             messages.info(request, msg)
-            return redirect('store:product', slug=slug)
+            return redirect('store:cart')
         else:
             order.items.add(order_item)
             msg = product.name + " has been added to your cart."
@@ -149,9 +149,9 @@ def add_wishlist_to_cart(request, slug):
             order_item.save()
             wishlist = wishlist_qs[0]
             wishlist.items.remove(wish_item)
-            msg = product.name + " already exists in your cart. The quantity has been incremented and removed from your cart."
+            msg = product.name + " already exists in your cart. The quantity has been incremented and removed from your wishlist."
             messages.info(request, msg)
-            return redirect('store:wishlist', slug=slug)
+            return redirect('store:wishlist')
         else:
             order.items.add(order_item)
             wishlist = wishlist_qs[0]
@@ -168,3 +168,100 @@ def add_wishlist_to_cart(request, slug):
         msg = product.name + " has been added to your cart and removed from your wishlist."
         messages.info(request, msg)
         return redirect('store:wishlist')
+
+@login_required
+def remove_from_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    order_item = OrderItem.objects.get(user=request.user, product=product)
+    order_qs= Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.items.filter(product__slug=slug):
+            order.items.remove(order_item)
+            order_item.quantity = 1
+            order_item.save()
+            msg = product.name + " has been removed from your cart."
+            messages.info(request, msg)
+            return redirect('store:cart')
+        else:
+            msg = product.name + " is not in your cart."
+            messages.info(request, msg)
+            return redirect('store:cart')
+    else:
+        msg = "You do not have an active order, please continue shopping."
+        messages.info(request, msg)
+        return redirect('store:home')
+
+@login_required
+def remove_single_from_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    order_item = OrderItem.objects.get(user=request.user, product=product)
+    order_qs= Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.items.filter(product__slug=slug):
+            order_item.quantity -= 1
+            order_item.save()
+            order_item = OrderItem.objects.get(user=request.user, product=product)
+            if order_item.quantity < 1 :
+                order.items.remove(order_item)
+            msg = "1 x of " + product.name + " has been removed from your cart."
+            messages.info(request, msg)
+            return redirect('store:cart')
+        else:
+            msg = product.name + " is not in your cart."
+            messages.info(request, msg)
+            return redirect('store:cart')
+    else:
+        msg = "You do not have an active order, please continue shopping."
+        messages.info(request, msg)
+        return redirect('store:home')
+
+@login_required
+def remove_from_wishlist(request, slug):
+    product = get_object_or_404(Product, slug=slug)
+    wishitem = WishItem.objects.get(user=request.user, product=product)
+    wishlist_qs= Wishlist.objects.filter(user=request.user, ordered=False)
+    if wishlist_qs.exists():
+        wishlist = wishlist_qs[0]
+        if wishlist.items.filter(product__slug=slug):
+            wishlist.items.remove(wishitem)
+            msg = product.name + " has been removed from your wishlist."
+            messages.info(request, msg)
+            return redirect('store:wishlist')
+        else:
+            msg = product.name + " is not in your wishlist."
+            messages.info(request, msg)
+            return redirect('store:wishlist')
+    else:
+        msg = "You have not added any item to your wishlist, please continue shopping."
+        messages.info(request, msg)
+        return redirect('store:home')
+
+@login_required
+def add_single_to_cart(request, slug):
+    product = get_object_or_404(Product, slug=slug, is_on_sale=True)
+    order_item, created = OrderItem.objects.get_or_create(
+        user=request.user, product=product, ordered=False)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        if order.items.filter(product__slug=product.slug).exists():
+            order_item.quantity += 1
+            order_item.save()
+            msg = "1 x " + product.name + " added."
+            messages.info(request, msg)
+            return redirect('store:cart')
+        else:
+            order.items.add(order_item)
+            msg = product.name + " has been added to your cart."
+            messages.info(request, msg)
+            return redirect('store:home')
+    else:
+        ordered_date = timezone.now()
+        order = Order.objects.create(
+            user=request.user, ordered_date=ordered_date)
+        order.items.add(order_item)
+        msg = product.name + " has been added to your cart."
+        messages.info(request, msg)
+        return redirect('store:home')

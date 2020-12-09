@@ -59,10 +59,10 @@
                     <td class="table-price"><h5># {{item.product.get_price}}</h5></td>
                     <td class="table-status"><h5>{% if item.product.is_on_sale %} In stock {% else %} Not in Stock {% endif %}</h5></td>
                     <td class="table-shop">
-                        <a href="{% url 'store:add-wish-to-cart' item.product.slug %}"><button  class="btn btn-inline"> Add to Cart</button></a>
+                        <a class="btn btn-inline" href="{% url 'store:add-wish-to-cart' item.product.slug %}">Add to Cart</a>
                     </td>
                     <td class="table-action">
-                      <button><i class="fas fa-trash-alt"></i></button>
+                      <a href="{% url 'store:remove-from-wishlist' item.product.slug %}"><i class="fas fa-trash-alt"></i></a>
                     </td>
                   </tr>
                   {% endfor %}
@@ -85,7 +85,7 @@
         <div class="row">
           <div class="col-lg-12">
             <div class="wish-btn">
-              <a href="shop-leftbar.html" class="btn btn-inline">
+              <a href="{% url 'store:home' %}" class="btn btn-inline">
                 <i class="fas fa-undo-alt"></i> <span>Continue Shopping</span>
               </a>
               <a href="checkout.html" class="btn btn-inline">
