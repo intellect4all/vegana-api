@@ -75,6 +75,16 @@ class Order(models.Model):
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
 
+    def get_order_total(self):
+        all_items = self.items.all()
+        total = 0
+        if all_items.exists():
+            for item in all_items:
+                total += item.get_item_total_price()
+            return total
+        else:
+            return total
+
     class Meta:
         ordering = ['-date_created']
 
