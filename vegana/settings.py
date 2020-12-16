@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'phonenumber_field'
 
     
 ]
@@ -151,3 +152,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 
 ACCOUNT_SESSION_REMEMBER = None
+
+#phone number setting section
+PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'
+
+#PHONENUMBER_DEFAULT_REGION = 'INTERNATIONAL'

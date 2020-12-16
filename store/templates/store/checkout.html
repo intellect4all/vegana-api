@@ -1,144 +1,292 @@
-{% extends 'component/base.html' %}
-{% load static %}
+{% extends 'component/base.html' %} {% load static %} {% block content %}
 
-{% block content %}
-
-    <section class="single-banner">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="single-content">
-                        <h2>Checkout</h2>
-                        <ol class="breadcrumb">
-                            <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Home</a></li>
-                            <li class="breadcrumb-item"><a href="{% url 'store:home' %}">Shop</a></li>
-                            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
+<section class="single-banner">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="single-content">
+          <h2>Checkout</h2>
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+              <a href="{% url 'store:home' %}">Home</a>
+            </li>
+            <li class="breadcrumb-item">
+              <a href="{% url 'store:home' %}">Shop</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+          </ol>
         </div>
-    </section>
-    <section class="checkout-part">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="checkout-action"> <i class="fas fa-pen    "></i> <span>Please fill in the correct details.</span></div>
-                </div>
-            </div>
-            <form class="checkout-form">
-                <div class="row">
-                    <div class="col-lg-6 mb-5">
-                        <div class="check-form-title">
-                            <h3>Billing Address</h3>
-                        </div>
-                        <div class="grid-input"> <input type="text" class="form-control" placeholder="First Name">
-                            <input type="text" class="form-control" placeholder="Last Name"></div>
-                        <div class="row-input"> <input type="text" class="form-control" placeholder="Company"> <input
-                                type="text" class="form-control" placeholder="Address"></div>
-                        <div class="grid-input"> <input type="text" class="form-control" placeholder="City"> <input
-                                type="text" class="form-control" placeholder="Post Code"></div>
-                        <div class="grid-input"> <input type="text" class="form-control" placeholder="Country"> <input
-                                type="text" class="form-control" placeholder="State"></div>
-                        <div class="grid-input"> <input type="Email" class="form-control" placeholder="Country"> <input
-                                type="text" class="form-control" placeholder="Phone Number"></div>
-                    </div>
-                    <div class="col-lg-6 mb-5">
-                        <div class="check-form-title">
-                            <h3>Shipping Address</h3>
-                        </div>
-                        <div class="grid-input"> <input type="text" class="form-control" placeholder="First Name">
-                            <input type="text" class="form-control" placeholder="Last Name"></div>
-                        <div class="row-input"> <input type="text" class="form-control" placeholder="Company"> <input
-                                type="text" class="form-control" placeholder="Address"></div>
-                        <div class="grid-input"> <input type="text" class="form-control" placeholder="City"> <input
-                                type="text" class="form-control" placeholder="Post Code"></div>
-                        <div class="grid-input"> <input type="text" class="form-control" placeholder="Country"> <input
-                                type="text" class="form-control" placeholder="State"></div>
-                        <div class="grid-input"> <input type="Email" class="form-control" placeholder="Country"> <input
-                                type="text" class="form-control" placeholder="Phone Number"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-6 mb-5">
-                        <div class="check-form-title">
-                            <h3>Order Notes</h3>
-                        </div>
-                        <div class="row-input"><textarea class="form-control" placeholder="Your quote"></textarea>
-                            <div class="custom-control custom-checkbox"> <input type="checkbox"
-                                    class="custom-control-input" id="check1"> <label class="custom-control-label"
-                                    for="check1">I have read and agree to the Terms and conditions</label></div>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mb-5">
-                        <div class="check-form-title">
-                            <h3>Payment Method</h3>
-                        </div>
-                        <div class="form-check"> <input class="form-check-input" type="radio" name="exampleRadios"
-                                id="radio1" value="option1" checked> <label class="form-check-label" for="radio1">
-                                Direct Bank Transfer </label></div>
-                        <div class="form-check"> <input class="form-check-input" type="radio" name="exampleRadios"
-                                id="radio2" value="option2"> <label class="form-check-label" for="radio2"> Credit Card
-                            </label></div>
-                        <div class="form-check"> <input class="form-check-input" type="radio" name="exampleRadios"
-                                id="radio3" value="option3"> <label class="form-check-label" for="radio3"> Pyoneer
-                            </label></div>
-                        <div class="form-check"> <input class="form-check-input" type="radio" name="exampleRadios"
-                                id="radio4" value="option3"> <label class="form-check-label" for="radio4"> Paypal
-                            </label></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12 mb-5">
-                        <div class="check-form-title">
-                            <h3>Confirm Order</h3>
-                        </div>
-                        <div class="checkout-table">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Product Name</th>
-                                        <th scope="col">Price</th>
-                                        <th scope="col">Quantity</th>
-                                        <th scope="col">Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {% for item in order_items %}
-                                    <tr>
-                                        <th scope="row">1</th>
-                                        <td class="check-product"> <img src="{{item.product.featured_image.url}}"
-                                                alt="product-1"> <span>{{item.product.name}}</span></td>
-                                        <td class="check-price"> <span>{{item.product.get_price}}</span></td>
-                                        <td class="check-quantity">
-                                            <a href="{% url 'store:add-single-to-checkout-cart' item.product.slug %}">+</a>
-                                            <p>{{item.quantity}}</p>
-                                            <a href="{% url 'store:remove-single-from-checkout-cart' item.product.slug %}">-</a></td>
-                                        <td class="check-total"> <span>{{item.get_item_total_price}}</span> <a href="{% url 'store:remove-from-checkout-cart' item.product.slug %}"><i
-                                                    class="fas fa-trash-alt"></i></a></td>
-                                    </tr>
-                                    {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-lg-12">
-                        <div class="checkout-charge">
-                            <ul>
-                                <li> <span>Shipping Charge</span> <span>$10.00</span></li>
-                                <li> <span>Subtotal</span> <span>$18.45</span></li>
-                                <li> <span>Total</span> <span>$48.00</span></li>
-                            </ul>
-                        </div>
-                        <div class="check-order-btn"> <button class="btn btn-inline"> <i class="fas fa-paper-plane"></i>
-                                <span>Place order</span> </button></div>
-                    </div>
-                </div>
-            </form>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="checkout-part">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="checkout-action">
+          <i class="fas fa-pen"></i>
+          <span>Please fill in the correct details.</span>
         </div>
-    </section>
+      </div>
+    </div>
+    <!-- <form class="checkout-form"> -->
+    <div class="row">
+      <div class="col-lg-6 mb-5">
+        <div class="check-form-title">
+          <h3>Billing Address</h3>
+        </div>
+        <div class="grid-input">
+          <input type="text" class="form-control" placeholder="First Name" />
+          <input type="text" class="form-control" placeholder="Last Name" />
+        </div>
+        <div class="row-input">
+          <input type="text" class="form-control" placeholder="Company" />
+          <input type="text" class="form-control" placeholder="Address" />
+        </div>
+        <div class="grid-input">
+          <input type="text" class="form-control" placeholder="City" />
+          <input type="text" class="form-control" placeholder="Post Code" />
+        </div>
+        <div class="grid-input">
+          <input type="text" class="form-control" placeholder="Country" />
+          <input type="text" class="form-control" placeholder="State" />
+        </div>
+        <div class="grid-input">
+          <input type="Email" class="form-control" placeholder="Country" />
+          <input type="text" class="form-control" placeholder="Phone Number" />
+        </div>
+      </div>
+      <div class="col-lg-6 mb-5">
+        <div class="check-form-title">
+          <h3>Confirm Order</h3>
+        </div>
+        <div class="checkout-table">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in order_items %}
+              <tr>
+                <th scope="row">1</th>
+                <td class="check-product">
+                  <img
+                    src="{{item.product.featured_image.url}}"
+                    alt="product-1"
+                  />
+                  <span>{{item.product.name}}</span>
+                </td>
+                <td class="check-price">
+                  <span>{{item.product.get_price}}</span>
+                </td>
+                <td class="check-quantity">
+                  <a
+                    href="{% url 'store:add-single-to-checkout-cart' item.product.slug %}"
+                    >+</a
+                  >
+                  <p>{{item.quantity}}</p>
+                  <a
+                    href="{% url 'store:remove-single-from-checkout-cart' item.product.slug %}"
+                    >-</a
+                  >
+                </td>
+                <td class="check-total">
+                  <span>{{item.get_item_total_price}}</span>
+                  <a
+                    href="{% url 'store:remove-from-checkout-cart' item.product.slug %}"
+                    ><i class="fas fa-trash-alt"></i
+                  ></a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+        <div class="checkout-charge">
+            <ul>
+              <!-- <li><span>TODO:Display a shipping fee</span> <span></span></li> -->
+              <li><span>Subtotal</span> <span>#{{cart_total}}</span></li>
+              <li><span>Total</span> <span>#{{order_total}}</span></li>
+            </ul>
+          </div>
+          <div class="check-order-btn">
+            <button class="btn btn-inline">
+              <i class="fas fa-paper-plane"></i> <span>Place order</span>
+            </button>
+          </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 mb-5">
+        <div class="check-form-title">
+          <h3>Shipping Address</h3>
+        </div>
+        <div class="grid-input">
+          <input type="text" class="form-control" placeholder="First Name" />
+          <input type="text" class="form-control" placeholder="Last Name" />
+        </div>
+        <div class="row-input">
+          <input type="text" class="form-control" placeholder="Company" />
+          <input type="text" class="form-control" placeholder="Address" />
+        </div>
+        <div class="grid-input">
+          <input type="text" class="form-control" placeholder="City" />
+          <input type="text" class="form-control" placeholder="Post Code" />
+        </div>
+        <div class="grid-input">
+          <input type="text" class="form-control" placeholder="Country" />
+          <input type="text" class="form-control" placeholder="State" />
+        </div>
+        <div class="grid-input">
+          <input type="Email" class="form-control" placeholder="Country" />
+          <input type="text" class="form-control" placeholder="Phone Number" />
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-6 mb-5">
+        <div class="check-form-title">
+          <h3>Order Notes</h3>
+        </div>
+        <div class="row-input">
+          <textarea class="form-control" placeholder="Your quote"></textarea>
+          <div class="custom-control custom-checkbox">
+            <input type="checkbox" class="custom-control-input" id="check1" />
+            <label class="custom-control-label" for="check1"
+              >I have read and agree to the Terms and conditions</label
+            >
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6 mb-5">
+        <div class="check-form-title">
+          <h3>Payment Method</h3>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="exampleRadios"
+            id="radio1"
+            value="option1"
+            checked
+          />
+          <label class="form-check-label" for="radio1">
+            Direct Bank Transfer
+          </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="exampleRadios"
+            id="radio2"
+            value="option2"
+          />
+          <label class="form-check-label" for="radio2"> Credit Card </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="exampleRadios"
+            id="radio3"
+            value="option3"
+          />
+          <label class="form-check-label" for="radio3"> Pyoneer </label>
+        </div>
+        <div class="form-check">
+          <input
+            class="form-check-input"
+            type="radio"
+            name="exampleRadios"
+            id="radio4"
+            value="option3"
+          />
+          <label class="form-check-label" for="radio4"> Paypal </label>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12 mb-5">
+        <div class="check-form-title">
+          <h3>Confirm Order</h3>
+        </div>
+        <div class="checkout-table">
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Product Name</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for item in order_items %}
+              <tr>
+                <th scope="row">1</th>
+                <td class="check-product">
+                  <img
+                    src="{{item.product.featured_image.url}}"
+                    alt="product-1"
+                  />
+                  <span>{{item.product.name}}</span>
+                </td>
+                <td class="check-price">
+                  <span>{{item.product.get_price}}</span>
+                </td>
+                <td class="check-quantity">
+                  <a
+                    href="{% url 'store:add-single-to-checkout-cart' item.product.slug %}"
+                    >+</a
+                  >
+                  <p>{{item.quantity}}</p>
+                  <a
+                    href="{% url 'store:remove-single-from-checkout-cart' item.product.slug %}"
+                    >-</a
+                  >
+                </td>
+                <td class="check-total">
+                  <span>{{item.get_item_total_price}}</span>
+                  <a
+                    href="{% url 'store:remove-from-checkout-cart' item.product.slug %}"
+                    ><i class="fas fa-trash-alt"></i
+                  ></a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="checkout-charge">
+          <ul>
+            <li><span>Shipping Charge</span> <span>$10.00</span></li>
+            <li><span>Subtotal</span> <span>#{{cart_total}}</span></li>
+            <li><span>Total</span> <span>$48.00</span></li>
+          </ul>
+        </div>
+        <div class="check-order-btn">
+          <button class="btn btn-inline">
+            <i class="fas fa-paper-plane"></i> <span>Place order</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- </form> -->
+  </div>
+</section>
 
-    {% endblock content %}
+{% endblock content %}

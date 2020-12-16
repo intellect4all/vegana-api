@@ -2,7 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from django.urls import reverse
 from django.contrib.auth import get_user_model
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Category(models.Model):
@@ -18,7 +18,7 @@ class Category(models.Model):
         return self.name
 class Tag(models.Model):
     name = models.CharField(max_length=50)
-
+    
     def __str__(self):
         return self.name
 
@@ -33,6 +33,7 @@ class Product(models.Model):
     featured_image = models.ImageField(null=True, blank=True)
     is_on_sale = models.BooleanField(default=True)
     created = models.DateTimeField(auto_now_add=True)
+    shipping_fee = models.IntegerField(default=0)
 
 
     def __str__(self):
@@ -74,6 +75,8 @@ class Order(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField()
     ordered = models.BooleanField(default=False)
+    billing = models.ForeignKey('BillingAdd', on_delete=models.SET_NULL, null=True)
+    shipping = models.ForeignKey('ShippingAdd', on_delete=models.SET_NULL, null=True)
 
     def get_order_total(self):
         all_items = self.items.all()
@@ -84,6 +87,17 @@ class Order(models.Model):
             return total
         else:
             return total
+
+    def get_shipping_total(self):
+        all_items = self.items.all()
+        shipping = 0
+        for item in all_items:
+            shipping += item.product.shipping_fee
+        return shipping
+    
+    def get_final_price(self):
+        total = self.get_order_total() + self.get_shipping_total() 
+        return total
 
     class Meta:
         ordering = ['-date_created']
@@ -106,3 +120,40 @@ class Wishlist(models.Model):
 
     class Meta:
         ordering = ['-date_created']
+
+class BillingAdd(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    company = models.CharField(max_length=50, blank=True, null=True)
+    address = models.TextField()
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    phone = PhoneNumberField()
+    same_as_shipping = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = ("Billling Address")
+        verbose_name_plural = ("Billing Addresses")
+
+    def __str__(self):
+        return self.user.username
+
+
+class ShippingAdd(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50)
+    last_name = models.CharField(max_length=50)
+    company = models.CharField(max_length=50, blank=True, null=True)
+    address = models.TextField()
+    city = models.CharField(max_length=50)
+    state = models.CharField(max_length=50)
+    phone = PhoneNumberField()
+    same_as_billing = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = ("Shipping Address")
+        verbose_name_plural = ("shipping Addresses")
+
+    def __str__(self):
+        return self.user.username

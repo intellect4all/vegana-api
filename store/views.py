@@ -90,10 +90,13 @@ def checkout(request):
         order_items = order.items.all()
         if order_items.exists():    
             cart_total = order.get_order_total()
+            order_total = order.get_final_price()
+            print(order_total)
             context = {
                 'order_items': order_items,
                 'all_categories': all_categories,
                 'cart_total': cart_total,
+                'order_total': order_total
             }
             return render(request, 'store/checkout.html', context)
         else:
@@ -102,6 +105,8 @@ def checkout(request):
     else:
         messages.info(request, "You do not have an active order, please continue shopping.")
         return redirect('store:home')
+
+
 
 @login_required
 def Cart(request):
