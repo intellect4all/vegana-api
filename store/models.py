@@ -77,6 +77,7 @@ class Order(models.Model):
     ordered = models.BooleanField(default=False)
     billing = models.ForeignKey('BillingAdd', on_delete=models.SET_NULL, null=True)
     shipping = models.ForeignKey('ShippingAdd', on_delete=models.SET_NULL, null=True)
+    details = models.ForeignKey('OrderDetail', on_delete=models.SET_NULL, null=True)
 
     def get_order_total(self):
         all_items = self.items.all()
@@ -126,15 +127,17 @@ class BillingAdd(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     company = models.CharField(max_length=50, blank=True, null=True)
-    address = models.TextField()
+    address = models.TextField(max_length=500)
     city = models.CharField(max_length=50)
+    post_code = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
-    phone = PhoneNumberField()
+    phone = models.CharField(max_length=11)
     same_as_shipping = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = ("Billling Address")
         verbose_name_plural = ("Billing Addresses")
+        ordering = ['-id']
 
     def __str__(self):
         return self.user.username
@@ -145,8 +148,9 @@ class ShippingAdd(models.Model):
     first_name = models.CharField(max_length=50)
     last_name = models.CharField(max_length=50)
     company = models.CharField(max_length=50, blank=True, null=True)
-    address = models.TextField()
+    address = models.TextField(max_length=500)
     city = models.CharField(max_length=50)
+    post_code = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
     phone = PhoneNumberField()
     same_as_billing = models.BooleanField(default=False)
@@ -154,6 +158,26 @@ class ShippingAdd(models.Model):
     class Meta:
         verbose_name = ("Shipping Address")
         verbose_name_plural = ("shipping Addresses")
+        ordering = ['-id']
 
     def __str__(self):
         return self.user.username
+
+PAYMENT_METHOD = (
+    ('PS', 'Paystack'),
+    ('PP', 'PayPal'),
+)
+class OrderDetail(models.Model):
+    user = models.ForeignKey(get_user_model(), on_delete=models.CASCADE, blank=True, null=True)
+    quote = models.TextField(max_length=1000)
+    payment = models.CharField(max_length=2, choices=PAYMENT_METHOD)
+    agree = models.BooleanField(default=False)
+    
+
+    class Meta:
+        verbose_name = ("Order Detail")
+        verbose_name_plural = ("Order Details")
+        ordering = ['-id']
+
+    def __str__(self):
+        return self.payment

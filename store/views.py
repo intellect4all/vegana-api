@@ -3,12 +3,13 @@ from django.contrib.auth import login
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render, get_list_or_404
 # from django.template import context
-# from django.views.generic import View, DetailView
+from django.views.generic import View, DetailView
 from .models import *
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import *
 
 # Create your views here.
 
@@ -85,18 +86,25 @@ def add_to_cart(request, slug):
 def checkout(request):
     all_categories = get_list_or_404(Category)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
+    billing_form = BillingAddForm()
+    shipping_form = ShippingAddForm()
+    detail_form = OrderDetailsForm()
     if order_qs.exists():
         order = order_qs[0]
         order_items = order.items.all()
         if order_items.exists():    
             cart_total = order.get_order_total()
             order_total = order.get_final_price()
-            print(order_total)
+            
             context = {
                 'order_items': order_items,
                 'all_categories': all_categories,
                 'cart_total': cart_total,
-                'order_total': order_total
+                'order_total': order_total,
+                'billing_form': billing_form,
+                'shipping_form': shipping_form,
+                'detail_form': detail_form,
+                'order' : order
             }
             return render(request, 'store/checkout.html', context)
         else:
@@ -107,6 +115,129 @@ def checkout(request):
         return redirect('store:home')
 
 
+class add_billing_address(View, LoginRequiredMixin):
+    def post(self, *args, **kwargs):
+        form = BillingAddForm(self.request.POST)
+        print(form)
+        if form.is_valid():
+            print("cool")
+            user = self.request.user
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            company = form.cleaned_data.get('company')
+            address = form.cleaned_data.get('address')
+            city = form.cleaned_data.get('city')
+            post_code = form.cleaned_data.get('post_code')
+            state =form.cleaned_data.get('state')
+            phone = form.cleaned_data.get('phone')
+            same_as_shipping = form.cleaned_data.get('same_as_shipping')
+            billing_add = BillingAdd.objects.create(
+                user=user, 
+                first_name=first_name, 
+                last_name=last_name, 
+                company=company, 
+                address=address, 
+                city=city,
+                post_code=post_code,
+                state=state,
+                phone=phone,
+                same_as_shipping=same_as_shipping
+                )
+            billing_add.save()
+            order_qs = Order.objects.filter(user=self.request.user, ordered=False)
+            order = order_qs[0]
+            order.billing = billing_add
+            order.save()
+            if billing_add.same_as_shipping:
+                shipping_add = ShippingAdd.objects.create(
+                user=user, 
+                first_name=first_name, 
+                last_name=last_name, 
+                company=company, 
+                address=address, 
+                city=city,
+                post_code=post_code,
+                state=state,
+                phone=phone,
+                )
+                shipping_add.save()
+                order.shipping = shipping_add
+                order.save()
+                messages.info(self.request, "Billing Address successfully added and set as shipping address.")
+                return redirect('store:checkout')
+            messages.info(self.request, "Billing Address successfully added.")
+            return redirect('store:checkout')
+        else:
+            messages.info(self.request, "Form not working")
+            return redirect('store:home')
+
+class add_shipping_address(View, LoginRequiredMixin):
+    def post(self, *args, **kwargs):
+        form = ShippingAddForm(self.request.POST)
+        if form.is_valid():
+            user = self.request.user
+            first_name = form.cleaned_data.get('first_name')
+            last_name = form.cleaned_data.get('last_name')
+            company = form.cleaned_data.get('company')
+            address = form.cleaned_data.get('address')
+            city = form.cleaned_data.get('city')
+            post_code = form.cleaned_data.get('post_code')
+            state =form.cleaned_data.get('state')
+            phone = form.cleaned_data.get('phone')
+            same_as_billing = form.cleaned_data.get('same_as_billing')
+            shipping_add = ShippingAdd.objects.create(
+                user=user, 
+                first_name=first_name, 
+                last_name=last_name, 
+                company=company, 
+                address=address, 
+                city=city,
+                post_code=post_code,
+                state=state,
+                phone=phone,
+                same_as_billing=same_as_billing
+                )
+            shipping_add.save()
+            order_qs = Order.objects.filter(user=self.request.user, ordered=False)
+            shipping= ShippingAdd.objects.filter(
+                user=user, 
+                first_name=first_name, 
+                last_name=last_name, 
+                company=company, 
+                address=address, 
+                city=city,
+                post_code=post_code,
+                state=state,
+                phone=phone,)[0]
+            order = order_qs[0]
+            order.shipping = shipping
+            order.save()
+            messages.info(self.request, "Shipping Address successfully added to the order.")
+            return redirect('store:checkout')
+        else:
+            messages.info(self.request, "Form not working")
+            return redirect('store:home')
+
+class add_order_details(View, LoginRequiredMixin):
+    def post(self, *args, **kwargs):
+        form = OrderDetailsForm(self.request.POST)
+        if form.is_valid():
+            quote = form.cleaned_data.get('quote')
+            user = self.request.user
+            payment = form.cleaned_data.get('payment')
+            agree = form.cleaned_data.get('agree')
+            details = OrderDetail.objects.create(user=user, quote=quote, payment=payment, agree=agree)
+            details.save()
+            order_qs = Order.objects.filter(user=self.request.user, ordered=False)
+            details= OrderDetail.objects.filter(
+                user=user, quote=quote, payment=payment, agree=agree)[0]
+            order = order_qs[0]
+            order.details = details
+            order.save()
+            return redirect('store:checkout')
+        else:
+            messages.info(self.request, "Form not working")
+            return redirect('store:home')
 
 @login_required
 def Cart(request):
@@ -367,3 +498,10 @@ def remove_from_checkout_cart(request, slug):
         msg = "You do not have an active order, please continue shopping."
         messages.info(request, msg)
         return redirect('store:home')
+
+class payment(View, LoginRequiredMixin):
+    def get(self, *args, **kwargs):
+        pass
+
+    def post(self, *args, **kwargs):
+        pass

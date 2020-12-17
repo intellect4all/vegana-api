@@ -25,6 +25,8 @@ urlpatterns = [
     path('add_single_to_checkout_cart/<slug>/', views.add_single_to_checkout_cart, name="add-single-to-checkout-cart"),
     path('remove_single_from_checkout_cart/<slug>/', views.remove_single_from_checkout_cart, name="remove-single-from-checkout-cart"),
     path('remove_from_checkout_cart/<slug>/', views.remove_from_checkout_cart, name="remove-from-checkout-cart"),
-    
+    path('add_billing_add/', views.add_billing_address.as_view(), name="add-billing"),
+    path('add_shipping_add/', views.add_shipping_address.as_view(), name="add-shipping"),
+    path('add_order_details/', views.add_order_details.as_view(), name="add-details"),
     
 ]

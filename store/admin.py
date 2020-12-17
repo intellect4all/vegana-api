@@ -56,4 +56,35 @@ class WishItemAdmin(admin.ModelAdmin):
     list_display = ('user', 'ordered', 'product',)
     list_filter = ('ordered',)
     search_fields = ('user',)
+
+
+@admin.register(BillingAdd)
+class BillingAddAdmin(admin.ModelAdmin):
+    '''Admin View for BillingAdd'''
+
+    list_display = ('user', 'last_name', 'first_name', 'address', 'city', 'state', 'phone', 'same_as_shipping', )
+    list_filter = ('same_as_shipping', 'state',)
     
+    # readonly_fields = ('user', 'last_name', 'first_name', 'address', 'city', 'state', 'phone', 'same_as_shipping', )
+    search_fields = ('user', 'last_name', 'first_name', 'address', 'city', 'state', 'phone', 'same_as_shipping', )
+    ordering = ('-id',)
+
+@admin.register(ShippingAdd)
+class ShippingAddAdmin(admin.ModelAdmin):
+    '''Admin View for ShippingAdd'''
+
+    list_display = ('user', 'last_name', 'first_name', 'address', 'city', 'state', 'phone', 'same_as_billing', )
+    list_filter = ('same_as_billing', 'state',)
+    
+    # readonly_fields = ('user', 'last_name', 'first_name', 'address', 'city', 'state', 'phone', 'same_as_billing', )
+    search_fields = ('user', 'last_name', 'first_name', 'address', 'city', 'state', 'phone', 'same_as_billing', )
+    ordering = ('-id',)
+
+@admin.register(OrderDetail)
+class OrderDetailAdmin(admin.ModelAdmin):
+    '''Admin View for OrderDetail'''
+
+    list_display = ('user', 'quote', 'payment', 'agree' )
+    list_filter = ('payment', 'agree',)
+    search_fields = ('quote',)
+    ordering = ('-id',)
