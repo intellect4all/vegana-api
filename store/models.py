@@ -183,3 +183,26 @@ class OrderDetail(models.Model):
 
     def __str__(self):
         return self.payment
+
+class Customer(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
+    first_name = models.CharField(max_length=50, blank=True, null=True)
+    last_name = models.CharField(max_length=50, blank=True, null=True)
+    phone = models.CharField(max_length=23, blank=True, null=True)
+    billing = models.ForeignKey('BillingAdd', on_delete=models.SET_NULL, blank=True, null=True)
+    shipping = models.ForeignKey('ShippingAdd', on_delete=models.SET_NULL, blank=True, null=True)
+    picture = models.ImageField(upload_to="profile_pics", null=True, blank=True)
+    address = models.TextField(max_length=500, default='')
+    city = models.CharField(max_length=50, default="...")
+    state = models.CharField(max_length=50, default="...")
+    post_code = models.CharField(max_length=50, null=True)
+    Country = models.CharField(max_length=50, default="Nigeria")
+    birthday = models.DateField(null=True, blank=True)
+
+    class Meta:
+        verbose_name = ("Customer")
+        verbose_name_plural = ("Customers")
+
+    def __str__(self):
+        return self.first_name
+

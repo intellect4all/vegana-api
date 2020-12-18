@@ -92,7 +92,7 @@ def checkout(request):
     detail_form = OrderDetailsForm()
     if order_qs.exists():
         order = order_qs[0]
-        order_items = order.items.all()
+        order_items = order.items.filter(ordered=False)
         if order_items.exists():    
             cart_total = order.get_order_total()
             order_total = order.get_final_price()
@@ -358,7 +358,7 @@ def add_wishlist_to_cart(request, slug):
 @login_required
 def remove_from_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    order_item = OrderItem.objects.get(user=request.user, product=product)
+    order_item = OrderItem.objects.get(user=request.user, product=product, ordered=False)
     order_qs= Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
@@ -423,7 +423,7 @@ class paystack(View, LoginRequiredMixin):
 @login_required
 def remove_single_from_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    order_item = OrderItem.objects.get(user=request.user, product=product)
+    order_item = OrderItem.objects.get(user=request.user, product=product, ordered=False)
     order_qs= Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
@@ -524,7 +524,7 @@ def add_single_to_checkout_cart(request, slug):
 @login_required
 def remove_single_from_checkout_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    order_item = OrderItem.objects.get(user=request.user, product=product)
+    order_item = OrderItem.objects.get(user=request.user, product=product, ordered=False)
     order_qs= Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
@@ -552,7 +552,7 @@ def remove_single_from_checkout_cart(request, slug):
 @login_required
 def remove_from_checkout_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
-    order_item = OrderItem.objects.get(user=request.user, product=product)
+    order_item = OrderItem.objects.get(user=request.user, product=product, ordered=False)
     order_qs= Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
@@ -576,3 +576,18 @@ class payment(View, LoginRequiredMixin):
 
     def post(self, *args, **kwargs):
         pass
+
+
+def account(request):
+    if request.user.is_authenticated:
+        user = request.user
+        all_categories = Category.objects.all()
+        context = {
+            'user': user,
+            'all_categories': all_categories,
+        }
+        return render(request, 'store/account.html', context)
+    else:
+        msg = "You do not have an account yet. Create an account now."
+        messages.info(request, msg)
+        return redirect('account_login')

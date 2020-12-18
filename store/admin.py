@@ -90,3 +90,12 @@ class OrderDetailAdmin(admin.ModelAdmin):
     list_filter = ('payment', 'agree',)
     search_fields = ('quote',)
     ordering = ('-id',)
+
+@admin.register(Customer)
+class CustomerAdmin(admin.ModelAdmin):
+    '''Admin View for Customer'''
+
+    list_display = ('user', 'state', 'city', 'phone', 'address')
+    list_filter = ('state', 'city')
+    search_fields = ('state', 'city', 'user', 'phone', 'address')
+    ordering = ('-id',)

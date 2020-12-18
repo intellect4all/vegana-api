@@ -59,6 +59,40 @@ for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
     <link rel="stylesheet" href="{% static 'assets/source/css/custom/signin-up.css' %}" />
   </head>
   <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-sm-12 col-md-12 col-lg-12">
+          {%if messages %}
+          {% for message in messages %}
+          <div
+            class="header-info alert alert-warning alert-dismissible fade show"
+            role="alert"
+          >
+            
+            <p>{{message}}</p>
+            <button
+              type="button"
+              {%
+              if
+              message.tags
+              %}
+              class="{{message.tags}}"
+              {%
+              endif
+              %}
+              data-dismiss="alert"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+            
+          </div>
+          {% endfor %}
+          {% endif %}
+        </div>  
+      </div>
+    </div>
+    
     <section class="sign-part">
       <div class="sign-content">
         <div class="content-cover">
