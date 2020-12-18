@@ -29,4 +29,7 @@ urlpatterns = [
     path('add_shipping_add/', views.add_shipping_address.as_view(), name="add-shipping"),
     path('add_order_details/', views.add_order_details.as_view(), name="add-details"),
     
+    #Payment urls
+    path('checkout/paystack/', views.paystack.as_view(), name="paystack"),
+
 ]

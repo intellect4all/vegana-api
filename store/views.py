@@ -10,6 +10,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
+import string, uuid
 
 # Create your views here.
 
@@ -229,11 +230,37 @@ class add_order_details(View, LoginRequiredMixin):
             details = OrderDetail.objects.create(user=user, quote=quote, payment=payment, agree=agree)
             details.save()
             order_qs = Order.objects.filter(user=self.request.user, ordered=False)
-            details= OrderDetail.objects.filter(
-                user=user, quote=quote, payment=payment, agree=agree)[0]
             order = order_qs[0]
             order.details = details
             order.save()
+
+            def get_id():
+                rand = uuid.uuid1()
+                return rand
+            
+            rand = get_id()
+            order2 = Order.objects.filter(ref=rand)
+            if not order2.exists():
+                order.ref = rand
+                order.save()
+                if details.payment == 'PS':
+                    return redirect('store:paystack')
+                elif details.payment == 'PP':
+                    return redirect('store:wishlist')
+
+                return redirect('store:checkout')
+            else:
+                c = order2.exists()
+                while c == True:
+                    r = get_id()
+                    order1 = Order.objects.filter(r=rand)
+                    c = order1.exists()
+                order.ref=r
+                order.save()
+                if details.payment == 'PS':
+                    return redirect('store:paystack')
+                elif details.payment == 'PP':
+                    return redirect('store:wishlist')
             return redirect('store:checkout')
         else:
             messages.info(self.request, "Form not working")
@@ -348,6 +375,50 @@ def remove_from_cart(request, slug):
         msg = "You do not have an active order, please continue shopping."
         messages.info(request, msg)
         return redirect('store:home')
+
+class paystack(View, LoginRequiredMixin):
+    def get(self, *args, **kwargs):
+        try:
+            order_qs = Order.objects.filter(user=self.request.user, ordered=False)
+            order = order_qs[0]
+            print(order)
+            if order.details:
+                print(order.details)
+                if order.details.payment == 'PS':
+                    print(order.details.payment)
+                    order_items = order.items.all()
+                    context = {
+                        'order':order,
+                        'order_items': order_items
+                    }
+                    return render(self.request, 'store/paystack.html', context)
+                else:
+                    msg = "Paystack is not your chosen payment option. Please select the proper option here."
+                    messages.info(request, msg)
+                    return redirect('store:checkout')
+            else:
+                msg = "Please fill the order details form to proceed to payment"
+                messages.info(request, msg)
+                return redirect('store:checkout')
+        except ObjectDoesNotExist:
+            msg = "You do not have an active order, please continue shopping."
+            messages.info(request, msg)
+            return redirect('store:home')
+
+    def post(self, *args, **kwargs):
+        order_qs = Order.objects.filter(user=self.request.user, ordered=False)
+        order = order_qs[0]
+        ordered_date = timezone.now()
+        order.ordered = True
+        order.ordered_date = ordered_date
+        order.save()
+        order.items.update(ordered=True)
+        for o in order.items.all():
+            o.save()
+        msg = f'Your order (Order ref: {order.ref}) has been placed and being processed for delivery.'
+        messages.info(self.request, msg)
+        return redirect('store:home')
+        
 
 @login_required
 def remove_single_from_cart(request, slug):

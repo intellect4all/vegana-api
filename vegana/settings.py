@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+LOGIN_REDIRECT_URL = 'localhost:8000'
 # Application definition
 
 INSTALLED_APPS = [
@@ -147,11 +147,20 @@ AUTHENTICATION_BACKENDS = [
     'allauth.account.auth_backends.AuthenticationBackend',
 ]
 
+# Django all-auth settings
 ACCOUNT_UNIQUE_EMAIL = True
+
+ACCOUNT_EMAIL_REQUIRED = True
 
 ACCOUNT_SIGNUP_PASSWORD_ENTER_TWICE = True
 
 ACCOUNT_SESSION_REMEMBER = None
+
+ACCOUNT_AUTHENTICATION_METHOD = 'username_email'
+
+ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_USERNAME_REQUIRED = True
 
 #phone number setting section
 PHONENUMBER_DB_FORMAT = 'INTERNATIONAL'

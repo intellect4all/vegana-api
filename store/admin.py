@@ -38,10 +38,12 @@ class OrderItemAdmin(admin.ModelAdmin):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     '''Admin View for Order'''
-    list_display = ('user', 'ordered')
-    list_filter = ('ordered',  'date_created')
-    search_fields = ('user',)
+    list_display = ('user', 'ordered', 'ordered_date', 'ref')
+    list_filter = ('ordered',  'date_created', 'ordered_date')
+    search_fields = ('user', 'ref')
+    readonly_fields = ('ref', 'user', 'ordered_date', 'items', )
     
+
 @admin.register(Wishlist)
 class WishListAdmin(admin.ModelAdmin):
     '''Admin View for WishList'''

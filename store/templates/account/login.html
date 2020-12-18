@@ -47,27 +47,6 @@ for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
     content="text/html;charset=utf-8"
   /><!-- /Added by HTTrack -->
   <head>
-    <!-- <meta charset="UTF-8" />
-    <meta name="author-name" content="Mironcoder | Miron Mahmud" />
-    <meta name="author-email" content="mironcoder@gmail.com" />
-    <meta
-      name="author-profile"
-      content="https://themeforest.net/user/mironcoder"
-    />
-    <meta name="template-name" content="Vegana" />
-    <meta name="template-created" content="09-November-2020" />
-    <meta
-      name="template-title"
-      content="Vegana - vegan food eCommerce store html template"
-    />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1, shrink-to-fit=no"
-    />
-    <meta
-      name="keywords"
-      content="vegana, vegan, food, eCommerce, store, html, template, bootstrap, vegetarian, organic, vegetables, greengrocery, fruit, healthy, shop" />-->
-    
     <title>Vegana - Login or Register</title>
     <link rel="icon" href="{% static 'assets/images/logo/favicon.png' %}" />
     <link rel="stylesheet" href="{% static 'assets/source/css/vendor/flaticon.css' %}" />
@@ -183,47 +162,43 @@ for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
             </li>
           </ul> 
           <div class="or-text"><p>or</p></div> -->
-          <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            {% if redirect_field_value %}
-            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-            {% endif %}
-            <button type="submit">{% trans "Sign Up" %} &raquo;</button>
-          </form>
           
           <form class="signup" id="signup_form" method="post" action="{% url 'account_signup' %}">
             {% csrf_token %}
             <label class="form-label">
-              <input type="text" placeholder="Phone number" />
-              <small>Please follow this example - 01XXXXXXXXX</small>
+              <input type="text" name="username" required id="id_username" maxlength="150" autocomplete="username" minlength="5" placeholder="Username" />
+              <small>kindly enter your username</small>
             </label>
             <label class="form-label">
-              <input type="password" id="pass" placeholder="Password" />
-              <button type="button"><i class="eye fas fa-eye"></i></button>
-              <small>Password must be 6 characters</small>
+              <input type="text" name="email" required id="id_email" autocomplete="email" maxlength="255" placeholder="Email" />
+              <small>Please follow this example - mironcoder@gmail.com</small>
             </label>
             <label class="form-label">
-              <input type="password" id="pass" placeholder="Repeat Password" />
+              <input type="password" required name="password1" id="id_password1" minlength="6" placeholder="Password" />
               <button type="button"><i class="eye fas fa-eye"></i></button>
-              <small>Password must be 6 characters</small>
+              <small>Password must be a minimum 6 characters</small>
+            </label>
+            <label class="form-label">
+              <input type="password" required name="password2" id="id_password2" placeholder="Repeat Password" />
+              <button type="button"><i class="eye fas fa-eye"></i></button>
+              <small>Password must match the password above</small>
             </label>
             <div class="form-link">
               <div class="custom-control custom-checkbox">
                 <input
                   type="checkbox"
                   class="custom-control-input"
+                  required
                   id="signup-check"
                 />
                 <label class="custom-control-label" for="signup-check"
-                  >I agree to the all <a href="#">terms & consitions</a> of
-                  bebostha.</label
+                  >I agree to the terms & conditions.</label
                 >
               </div>
             </div>
-            {% if redirect_field_value %}
-            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-            {% endif %}
+            
+            <input type="hidden" name="{{ redirect_field_name }}" value="{% url 'store:home' %}" />
+            
             <div class="form-btn">
               <button type="submit" class="btn btn-outline">
                 sign up free

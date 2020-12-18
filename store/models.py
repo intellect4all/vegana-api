@@ -78,6 +78,8 @@ class Order(models.Model):
     billing = models.ForeignKey('BillingAdd', on_delete=models.SET_NULL, null=True)
     shipping = models.ForeignKey('ShippingAdd', on_delete=models.SET_NULL, null=True)
     details = models.ForeignKey('OrderDetail', on_delete=models.SET_NULL, null=True)
+    ref = models.CharField(max_length=50, null=True, blank=True, unique=True,)
+    
 
     def get_order_total(self):
         all_items = self.items.all()
