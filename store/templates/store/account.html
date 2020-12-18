@@ -1,4 +1,4 @@
-{% extends 'component/base.html' %} {% load static %} {% block content %}
+{% extends 'component/base.html' %} {% load static %} {% load humanize %} {% block content %}
 <section class="single-banner">
   <div class="container">
     <div class="row">
@@ -7,7 +7,7 @@
           <h2>My Account</h2>
           <ol class="breadcrumb">
             <li class="breadcrumb-item">
-              <a href="../home-1.html">Home</a>
+              <a href="{% url 'store:home'%}">Home</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page">
               My Account
@@ -38,7 +38,7 @@
             <li>
               <a href="#sett" class="nav-link" data-toggle="tab">Settings</a>
             </li>
-            <li><a href="signin-up.html" class="nav-link">Logout</a></li>
+            <li><a href="{% url 'account_logout' %}" class="nav-link">Logout</a></li>
           </ul>
         </div>
       </div>
@@ -71,7 +71,7 @@
           <div class="account-card">
             <div class="account-title">
               <h3>Newsletter</h3>
-              <a href="#">Edit</a>
+              
             </div>
             <div class="dash-content">
               <p>
@@ -84,24 +84,24 @@
           <div class="account-card">
             <div class="account-title">
               <h3>Contact Information</h3>
-              <a href="#">Edit</a>
+              
             </div>
             <ul class="account-list">
               <li>
                 <h6>Name:</h6>
-                <p>{{user.first_name}}, {{user.last_name}}</p>
+                <p>{{customer.first_name}}, {{customer.last_name}}</p>
               </li>
               <li>
                 <h6>Email:</h6>
-                <p>{{user.email}}</p>
+                <p>{{customer.user.email}}</p>
               </li>
               <li>
                 <h6>Phone:</h6>
-                <p>{{user.phone}}</p>
+                <p>{{customer.phone|phone2numeric}}</p>
               </li>
               <li>
                 <h6>Username:</h6>
-                <p>{{user.username}}</p>
+                <p>{{customer.user.username}}</p>
               </li>
             </ul>
           </div>
@@ -110,24 +110,24 @@
           <div class="account-card">
             <div class="account-title">
               <h3>Billing Address</h3>
-              <a href="#">Edit</a>
+              
             </div>
             <ul class="account-list">
               <li>
                 <h6>Post Code:</h6>
-                <p>1420</p>
+                <p>{{customer.billing.post_code}}</p>
               </li>
               <li>
                 <h6>State:</h6>
-                <p>West Jalkuri</p>
+                <p>{{customer.state}}</p>
               </li>
               <li>
                 <h6>City:</h6>
-                <p>Narayanganj</p>
+                <p>{{customer.billing.city}}</p>
               </li>
               <li>
                 <h6>Country:</h6>
-                <p>Bangladesh</p>
+                <p>{{customer.country}}</p>
               </li>
             </ul>
           </div>
@@ -136,24 +136,24 @@
           <div class="account-card">
             <div class="account-title">
               <h3>Shipping Address</h3>
-              <a href="#">Edit</a>
+              
             </div>
             <ul class="account-list">
               <li>
                 <h6>Post Code:</h6>
-                <p>1100</p>
+                <p>{{customer.shipping.post_code}}</p>
               </li>
               <li>
                 <h6>State:</h6>
-                <p>Kawran Bazar</p>
+                <p>{{customer.shipping.state}}</p>
               </li>
               <li>
                 <h6>City:</h6>
-                <p>Dhaka</p>
+                <p>{{customer.shipping.city}}</p>
               </li>
               <li>
                 <h6>Country:</h6>
-                <p>Bangladesh</p>
+                <p>{{customer.country}}</p>
               </li>
             </ul>
           </div>
@@ -168,29 +168,29 @@
         <div class="col-lg-6">
           <div class="account-card">
             <div class="account-title">
-              <h3>Introduction</h3>
-              <a href="#">Edit</a>
+              <h3>Account Summary</h3>
+              
             </div>
             <div class="profile-intro">
               <div class="profile-author">
                 <a href="#"
-                  ><img src="../assets/img/review/01.jpg" alt="01"
+                  ><img src="{{customer.picture.url}}" alt="01"
                 /></a>
-                <h4>Richard Williamson</h4>
-                <p><span>Joined:</span>02-02-2020</p>
+                <h4>{{customer.first_name}} {{customer.last_name}}</h4>
+                <p><span>Joined:</span>{{customer.joined|date:"M j, Y"}}</p>
               </div>
               <ul class="account-list">
                 <li>
-                  <h6>Total Order:</h6>
-                  <p>07</p>
+                  <h6>Total Orders:</h6>
+                  <p>{{orders.count}}</p>
                 </li>
                 <li>
-                  <h6>Cencel Order:</h6>
+                  <h6>Cancelled Orders:</h6>
                   <p>02</p>
                 </li>
                 <li>
-                  <h6>Spend Money:</h6>
-                  <p>$98</p>
+                  <h6>Spend Moneys:</h6>
+                  <p>#{{total_spending|intcomma}}</p>
                 </li>
                 <li>
                   <h6>Pending Order:</h6>
@@ -208,20 +208,20 @@
             </div>
             <ul class="account-list">
               <li>
-                <h6>Website:</h6>
-                <p>www.richardwilliam.com</p>
+                <h6>Name:</h6>
+                <p>{{customer.first_name}}, {{customer.last_name}}</p>
               </li>
               <li>
                 <h6>Email:</h6>
-                <p>richard@example.com</p>
+                <p>{{customer.user.email}}</p>
               </li>
               <li>
                 <h6>Phone:</h6>
-                <p>+12027953213</p>
+                <p>{{customer.phone|phone2numeric}}</p>
               </li>
               <li>
-                <h6>Skype:</h6>
-                <p>live:richard</p>
+                <h6>Username:</h6>
+                <p>{{customer.user.username}}</p>
               </li>
             </ul>
           </div>
@@ -235,19 +235,19 @@
             <ul class="account-list">
               <li>
                 <h6>Post Code:</h6>
-                <p>1420</p>
+                <p>{{customer.billing.post_code}}</p>
               </li>
               <li>
                 <h6>State:</h6>
-                <p>West Jalkuri</p>
+                <p>{{customer.state}}</p>
               </li>
               <li>
                 <h6>City:</h6>
-                <p>Narayanganj</p>
+                <p>{{customer.billing.city}}</p>
               </li>
               <li>
                 <h6>Country:</h6>
-                <p>Bangladesh</p>
+                <p>{{customer.country}}</p>
               </li>
             </ul>
           </div>
@@ -261,19 +261,19 @@
             <ul class="account-list">
               <li>
                 <h6>Post Code:</h6>
-                <p>1100</p>
+                <p>{{customer.shipping.post_code}}</p>
               </li>
               <li>
                 <h6>State:</h6>
-                <p>Kawran Bazar</p>
+                <p>{{customer.shipping.state}}</p>
               </li>
               <li>
                 <h6>City:</h6>
-                <p>Dhaka</p>
+                <p>{{customer.shipping.city}}</p>
               </li>
               <li>
                 <h6>Country:</h6>
-                <p>Bangladesh</p>
+                <p>{{customer.country}}</p>
               </li>
             </ul>
           </div>
@@ -295,76 +295,32 @@
                   <th scope="col">Status</th>
                   <th scope="col">Product</th>
                   <th scope="col">Total</th>
-                  <th scope="col">Action</th>
                 </tr>
               </thead>
               <tbody>
+                {% for order in orders%}
                 <tr>
-                  <td class="table-order"><p>01</p></td>
-                  <td class="table-date"><p>May 10, 2018</p></td>
-                  <td class="table-status"><p>Completed</p></td>
-                  <td class="table-product"><p>4 Item</p></td>
-                  <td class="table-total"><p>$32.00</p></td>
-                  <td class="table-action">
-                    <a href="#"><i class="fas fa-eye"></i></a
-                    ><a href="#"><i class="fas fa-trash-alt"></i></a>
-                  </td>
+                  <td class="table-order"><p>{{forloop.counter}}</p></td>
+                  <td class="table-date"><p>{{order.ordered_date|date:"M d, Y"}}</p></td>
+                  <td class="table-status"><p>{% if order.ordered %} Completed {%else%} Not yet Ordered {%endif%}</p></td>
+                  <td class="table-product"><p>{{order.items.all.count}}</p></td>
+                  <td class="table-total"><p>#{{order.get_final_price}}</p></td>
                 </tr>
-                <tr>
-                  <td class="table-order"><p>02</p></td>
-                  <td class="table-date"><p>May 10, 2018</p></td>
-                  <td class="table-status"><p>Completed</p></td>
-                  <td class="table-product"><p>4 Item</p></td>
-                  <td class="table-total"><p>$32.00</p></td>
-                  <td class="table-action">
-                    <a href="#"><i class="fas fa-eye"></i></a
-                    ><a href="#"><i class="fas fa-trash-alt"></i></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-order"><p>03</p></td>
-                  <td class="table-date"><p>May 10, 2018</p></td>
-                  <td class="table-status"><p>Completed</p></td>
-                  <td class="table-product"><p>4 Item</p></td>
-                  <td class="table-total"><p>$32.00</p></td>
-                  <td class="table-action">
-                    <a href="#"><i class="fas fa-eye"></i></a
-                    ><a href="#"><i class="fas fa-trash-alt"></i></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-order"><p>04</p></td>
-                  <td class="table-date"><p>May 10, 2018</p></td>
-                  <td class="table-status"><p>Processing</p></td>
-                  <td class="table-product"><p>4 Item</p></td>
-                  <td class="table-total"><p>$32.00</p></td>
-                  <td class="table-action">
-                    <a href="#"><i class="fas fa-eye"></i></a
-                    ><a href="#"><i class="fas fa-trash-alt"></i></a>
-                  </td>
-                </tr>
-                <tr>
-                  <td class="table-order"><p>05</p></td>
-                  <td class="table-date"><p>May 10, 2018</p></td>
-                  <td class="table-status"><p>Processing</p></td>
-                  <td class="table-product"><p>4 Item</p></td>
-                  <td class="table-total"><p>$32.00</p></td>
-                  <td class="table-action">
-                    <a href="#"><i class="fas fa-eye"></i></a
-                    ><a href="#"><i class="fas fa-trash-alt"></i></a>
-                  </td>
-                </tr>
+                {%endfor%}
               </tbody>
             </table>
           </div>
         </div>
-        <div class="col-lg-12">
+
+        <!--
+          TODO: add order pagination
+          <div class="col-lg-12">
           <div class="order-btn">
             <a href="#" class="btn btn-inline"
               ><i class="fas fa-eye"></i>show more</a
             >
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
     <div class="tab-pane" id="sett">

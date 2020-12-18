@@ -580,11 +580,21 @@ class payment(View, LoginRequiredMixin):
 
 def account(request):
     if request.user.is_authenticated:
-        user = request.user
         all_categories = Category.objects.all()
+        user = request.user
+        customer = Customer.objects.get(user=user)
+        orders = Order.objects.all()
+        total_spending = 0
+        for order in orders:
+            price = order.get_final_price()
+            total_spending += price
         context = {
-            'user': user,
+            'customer': customer,
             'all_categories': all_categories,
+            'orders' : orders,
+
+            'total_spending' : total_spending
+            
         }
         return render(request, 'store/account.html', context)
     else:

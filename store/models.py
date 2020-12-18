@@ -198,6 +198,7 @@ class Customer(models.Model):
     post_code = models.CharField(max_length=50, null=True)
     Country = models.CharField(max_length=50, default="Nigeria")
     birthday = models.DateField(null=True, blank=True)
+    joined = models.DateField(auto_now_add=True)
 
     class Meta:
         verbose_name = ("Customer")
