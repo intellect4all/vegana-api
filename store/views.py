@@ -1,5 +1,6 @@
 
 from django.contrib.auth import login
+from django.http import request
 from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render, get_list_or_404
 # from django.template import context
@@ -554,6 +555,7 @@ def remove_from_checkout_cart(request, slug):
     product = get_object_or_404(Product, slug=slug)
     order_item = OrderItem.objects.get(user=request.user, product=product, ordered=False)
     order_qs= Order.objects.filter(user=request.user, ordered=False)
+    
     if order_qs.exists():
         order = order_qs[0]
         if order.items.filter(product__slug=slug):
@@ -570,34 +572,43 @@ def remove_from_checkout_cart(request, slug):
         messages.info(request, msg)
         return redirect('store:home')
 
-class payment(View, LoginRequiredMixin):
+
+class Account(View):
     def get(self, *args, **kwargs):
-        pass
+        if self.request.user.is_authenticated:
+            customer, created = Customer.objects.get_or_create(user=self.request.user)
+            customer_form = CustomerInfoForm(instance=customer)
+            all_categories = Category.objects.all()
+            user = self.request.user
+            customer = Customer.objects.get(user=user)
+            orders = Order.objects.all()
+            total_spending = 0
+            for order in orders:
+                price = order.get_final_price()
+                total_spending += price
+            context = {
+                'customer': customer,
+                'all_categories': all_categories,
+                'orders' : orders,
+                'customer_form' : customer_form,
+                'total_spending' : total_spending
+                
+            }
+            return render(self.request, 'store/account.html', context)
+        else:
+            msg = "You do not have an account yet. Create an account now."
+            messages.info(self.request, msg)
+            return redirect('account_login')
 
     def post(self, *args, **kwargs):
-        pass
-
-
-def account(request):
-    if request.user.is_authenticated:
-        all_categories = Category.objects.all()
-        user = request.user
-        customer = Customer.objects.get(user=user)
-        orders = Order.objects.all()
-        total_spending = 0
-        for order in orders:
-            price = order.get_final_price()
-            total_spending += price
-        context = {
-            'customer': customer,
-            'all_categories': all_categories,
-            'orders' : orders,
-
-            'total_spending' : total_spending
-            
-        }
-        return render(request, 'store/account.html', context)
-    else:
-        msg = "You do not have an account yet. Create an account now."
-        messages.info(request, msg)
-        return redirect('account_login')
+        user, created = Customer.objects.get_or_create(user=self.request.user)
+        form = CustomerInfoForm(self.request.POST, self.request.FILES, instance=user, )
+        if form.is_valid():
+            form.save()
+            msg = "Profile updated successfully."
+            messages.info(self.request, msg)
+            return redirect('store:account')
+        else:
+            msg = "Something went wrong. Please try updating again."
+            messages.info(self.request, msg)
+            return redirect('store:account')

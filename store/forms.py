@@ -1,4 +1,6 @@
-from django import forms 
+from django import forms
+from django.db.models.fields import TextField
+from django.forms.widgets import TextInput 
 from .models import *
 
 class BillingAddForm(forms.Form):
@@ -31,6 +33,21 @@ class OrderDetailsForm(forms.ModelForm):
         exclude = ['user']
         widgets = {'payment': forms.RadioSelect}
 
-    # quote = forms.CharField(max_length=1000, required=False)
-    # payment =  forms.ModelChoiceField()
-    # agree = forms.BooleanField(default=False)
+class CustomerInfoForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = '__all__'
+        exclude = ['user', 'billing', 'shipping', 'joined']
+        widgets = {
+            'first_name': TextInput(attrs={'class': 'form-control'}),
+            'last_name': TextInput(attrs={'class': 'form-control'}),
+            'phone': TextInput(attrs={'class': 'form-control'}),
+            'address': TextInput(attrs={'class': 'form-control'}),
+            'city': TextInput(attrs={'class': 'form-control'}),
+            'state': TextInput(attrs={'class': 'form-control'}),
+            'post_code': TextInput(attrs={'class': 'form-control'}),
+            'country': TextInput(attrs={'class': 'form-control'}),
+            'birthday': TextInput(attrs={'class': 'form-control'}),
+            
+        
+        }

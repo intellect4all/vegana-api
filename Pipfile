@@ -10,6 +10,7 @@ django-allauth = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
 
 [dev-packages]
+pylama = "*"
 
 [requires]
 python_version = "3.9"
