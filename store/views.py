@@ -1,4 +1,5 @@
 
+from typing import Union
 from django.contrib.auth import login
 from django.http import request
 from django.utils import timezone
@@ -18,9 +19,9 @@ import string, uuid
 
 def HomePage(request):
     all_categories = Category.objects.all()
-    trending_products = Product.objects.filter(is_on_sale=True)
-    best_selling_products = Product.objects.filter(is_on_sale=True)
-    new_products = Product.objects.filter(is_on_sale=True)
+    trending_products = Product.objects.filter(tags__slug="trending-products")
+    best_selling_products = Product.objects.filter(tags__slug="best-selling-products", is_on_sale=True)
+    new_products = Product.objects.filter(is_on_sale=True)[:9]
     context = {
         'trending_products': trending_products,
         'best_selling_products': best_selling_products,
@@ -33,19 +34,62 @@ def HomePage(request):
 def ProductDetails(request, slug):
     all_categories = Category.objects.all()
     product = get_object_or_404(Product, slug=slug, is_on_sale=True)
-    new_arrivals = Product.objects.filter(is_on_sale=True)[:3]
+    
+    def get_related():
+        product = get_object_or_404(Product, slug=slug, is_on_sale=True)
+        if product.category:
+            cat_related = Product.objects.filter(category__slug=product.category.slug, is_on_sale=True).exclude(slug=product.slug)
+        if product.tags.all().exists():
+            tag_related = Product.objects.filter(tags__name=product.tags.all()[0], is_on_sale=True).exclude(slug=product.slug)
+        if product.tags.all().exists() and product.category:
+            # tag_related = Product.objects.filter(tags__name=product.tags.all()[0], is_on_sale=True).exclude(slug=product.slug)
+            # cat_related = Product.objects.filter(category__slug=product.category.slug, is_on_sale=True).exclude(slug=product.slug)
+            related = cat_related.union(tag_related)
+            return related.reverse()
+        elif product.tags.all().exists() and not product.category:
+            related = tag_related
+            return related
+        elif product.category and not product.tags.all().exists():
+            related = tag_related
+            return related
+        else:
+            return None
+    new_arrivals = Product.objects.filter(is_on_sale=True)[:9]
+    print(get_related())
     context = {
         'new_arrivals': new_arrivals,
         'product': product,
         'all_categories': all_categories,
+        'related': get_related()
     }
     return render(request, 'store/product-details.html', context)
 
+class Contact(View):
+    def get(self, *args, **kwargs):
+        pass
+    
+    def post(self, *args, **kwargs):
+        pass
 
 def CategoryView(request, category):
     all_categories = Category.objects.all()
     cat_products = Product.objects.filter(
         category__name=category.title(), is_on_sale=True)
+    cat = Category.objects.get(name=category.title())
+    if cat_products.exists():
+        context = {
+            'cat_products': cat_products,
+            'all_categories': all_categories,
+            'cat' : cat
+        }
+        return render(request, 'store/category.html', context)
+    else:
+        messages.info(request, "The category is empty or does not exist")
+        return redirect('store:home')
+
+def shop(request):
+    all_categories = Category.objects.all()
+    cat_products = Product.objects.filter(is_on_sale=True)
     if cat_products.exists():
         context = {
             'cat_products': cat_products,
@@ -572,8 +616,7 @@ def remove_from_checkout_cart(request, slug):
         messages.info(request, msg)
         return redirect('store:home')
 
-
-class Account(View):
+class Account(View, LoginRequiredMixin):
     def get(self, *args, **kwargs):
         if self.request.user.is_authenticated:
             customer, created = Customer.objects.get_or_create(user=self.request.user)

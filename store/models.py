@@ -6,9 +6,9 @@ from phonenumber_field.modelfields import PhoneNumberField
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, unique=True)
     class_icon = models.CharField(max_length=50, null=True, blank=True)
-    slug = models.SlugField(editable=False)
+    slug = models.SlugField()
 
     def save(self, *args, **kwargs):                                  # add this
         self.slug = slugify(self.name, allow_unicode=True)           # add this
@@ -17,17 +17,22 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 class Tag(models.Model):
-    name = models.CharField(max_length=50)
-    
+    name = models.CharField(max_length=50, unique=True)
+    slug = models.SlugField(max_length=255, )
+
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):                                  # add this
+        self.slug = slugify(self.name, allow_unicode=True)           # add this
+        super().save(*args, **kwargs)
 
 class Product(models.Model):
     name = models.CharField(max_length=150)
     actual_price = models.IntegerField()
     discount_price = models.IntegerField(null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
-    tags = models.ManyToManyField(Tag, related_name='tags', blank=True)
+    tags = models.ManyToManyField(Tag, related_name='tag', blank=True)
     slug = models.SlugField(unique=True, editable=False)
     description = models.TextField(max_length=3000, default="This is an auto generated product description.")
     featured_image = models.ImageField(null=True, blank=True)
@@ -38,8 +43,8 @@ class Product(models.Model):
 
     def __str__(self):
         return self.name
-    class Meta:
-        ordering = ['-created']
+    # class Meta:
+    #     ordering = ['-created']
 
     #this returns the slug of the product
     def save(self, *args, **kwargs):                                  # add this
@@ -133,7 +138,7 @@ class BillingAdd(models.Model):
     city = models.CharField(max_length=50)
     post_code = models.CharField(max_length=50)
     state = models.CharField(max_length=50)
-    phone = models.CharField(max_length=11)
+    phone = models.CharField(max_length=20)
     same_as_shipping = models.BooleanField(default=False)
 
     class Meta:
@@ -186,16 +191,16 @@ class OrderDetail(models.Model):
 
 class Customer(models.Model):
     user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=50, blank=True, null=True)
-    last_name = models.CharField(max_length=50, blank=True, null=True)
-    phone = models.CharField(max_length=23, blank=True, null=True)
+    first_name = models.CharField(max_length=50, default='', blank=True, null=True)
+    last_name = models.CharField(max_length=50, default='', blank=True, null=True)
+    phone = models.CharField(max_length=23, default='', blank=True, null=True)
     billing = models.ForeignKey('BillingAdd', on_delete=models.SET_NULL, blank=True, null=True)
     shipping = models.ForeignKey('ShippingAdd', on_delete=models.SET_NULL, blank=True, null=True)
     picture = models.ImageField(upload_to="profile_pics/", null=True, blank=True)
     address = models.TextField(max_length=500, default='')
     city = models.CharField(max_length=50, default="...")
     state = models.CharField(max_length=50, default="...")
-    post_code = models.CharField(max_length=50, null=True)
+    post_code = models.CharField(max_length=50,default='', null=True, blank=True)
     country = models.CharField(max_length=50, default="Nigeria")
     birthday = models.DateField(null=True, blank=True)
     joined = models.DateField(auto_now_add=True)
@@ -205,5 +210,5 @@ class Customer(models.Model):
         verbose_name_plural = ("Customers")
 
     def __str__(self):
-        return self.first_name
+        return self.user.username
 

@@ -24,7 +24,7 @@
             </form>
             <ul class="right-widget">
               <li>
-                <a class="icon icon-inline" href="singles/signin-up.html"
+                <a class="icon icon-inline" href="{% if request.user.is_authenticated %} {% url 'account_logout'%} {% else %} {% url 'account_login' %} {% endif %}"
                   ><i class="fas fa-user"></i
                 ></a>
               </li>
@@ -85,66 +85,9 @@
                   </div>
                 </li>
                 <li class="navbar-item navbar-dropdown">
-                  <a class="navbar-link dropdown-indicator" href="#">
-                    <span>Shop</span> <i class="fas fa-chevron-down"></i>
+                  <a class="navbar-link dropdown-indicator" href="{% url 'store:shop' %}">
+                    <span>Shop</span>
                   </a>
-                  <ul class="dropdown-list">
-                    <li>
-                      <a
-                        class="dropdown-link"
-                        href="singles/shop-leftbar.html"
-                        >Shop with leftbar</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        class="dropdown-link"
-                        href="singles/shop-rightbar.html"
-                        >Shop with rightbar</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        class="dropdown-link"
-                        href="singles/shop-fullwidth.html"
-                        >Shop fullwidth</a
-                      >
-                    </li>
-                    <li>
-                      <a
-                        class="dropdown-link"
-                        href="singles/product-details.html"
-                        >Product details</a
-                      >
-                    </li>
-                  </ul>
-                </li>
-                <li class="navbar-item navbar-dropdown">
-                  <a class="navbar-link dropdown-indicator" href="#">
-                    <span>pages</span> <i class="fas fa-chevron-down"></i>
-                  </a>
-                  <ul class="dropdown-list">
-                    <li>
-                      <a class="dropdown-link" href="singles/cartlist.html"
-                        >Cartlist</a
-                      >
-                    </li>
-                    <li>
-                      <a class="dropdown-link" href="singles/wishlist.html"
-                        >Wisthlist</a
-                      >
-                    </li>
-                    <li>
-                      <a class="dropdown-link" href="singles/checkout.html"
-                        >Checkout</a
-                      >
-                    </li>
-                    <li>
-                      <a class="dropdown-link" href="singles/signin-up.html"
-                        >Login or Register</a
-                      >
-                    </li>
-                  </ul>
                 </li>
                 <li class="navbar-item navbar-dropdown">
                   <a class="navbar-link dropdown-indicator" href="#">
@@ -201,7 +144,7 @@
         </a>
       </li>
       <li>
-        <a href="singles/account.html">
+        <a href="{% url 'store:account' %}">
           <i class="fas fa-cog"></i> <span>Settings</span>
         </a>
       </li>

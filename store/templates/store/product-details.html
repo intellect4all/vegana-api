@@ -1,6 +1,10 @@
 {% extends 'component/base.html' %}
 {% load static %}
 
+{% block title %}
+  <title>{{product.name}}</title>
+{% endblock title %}
+
 {% block content %}
       
     <section class="single-banner">
@@ -210,7 +214,7 @@
                     <div class="reviewer-img">
                       <a href="#"
                         ><img
-                          src="../assets/images/review/02.jpg"
+                          src="{% static 'assets/images/review/02.jpg' %}"
                           alt="reviewer-2"
                       /></a>
                     </div>

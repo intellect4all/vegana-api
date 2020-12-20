@@ -1,4 +1,10 @@
-{% extends 'component/base.html' %} {% load static %} {% load humanize %} {% block content %}
+{% extends 'component/base.html' %} {% load static %} {% load humanize %} 
+
+{% block title %}
+  <title>Account ({{request.user.username}}) - Vegana</title>
+{% endblock title %}
+
+{% block content %}
 <section class="single-banner">
   <div class="container">
     <div class="row">
@@ -174,7 +180,7 @@
             <div class="profile-intro">
               <div class="profile-author">
                 <a href="#"
-                  ><img src="{{customer.picture.url}}" alt="01"
+                  ><img src="{% if customer.picture %} {{customer.picture.url}} {%else%} {% static 'images/02.png'%} {%endif%}" alt="01"
                 /></a>
                 <h4>{{customer.first_name}} {{customer.last_name}}</h4>
                 <p><span>Joined:</span>{{customer.joined|date:"M j, Y"}}</p>

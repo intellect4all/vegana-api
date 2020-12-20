@@ -11,7 +11,7 @@ class BillingAddForm(forms.Form):
     city = forms.CharField(max_length=50)
     post_code = forms.CharField(max_length=50)
     state = forms.CharField(max_length=50)
-    phone = forms.CharField(max_length=12)
+    phone = forms.CharField(max_length=20)
     same_as_shipping = forms.BooleanField(required=False)
 
 class ShippingAddForm(forms.Form):
@@ -22,7 +22,7 @@ class ShippingAddForm(forms.Form):
     city = forms.CharField(max_length=50)
     post_code = forms.CharField(max_length=50)
     state = forms.CharField(max_length=50)
-    phone = forms.CharField(max_length=12)
+    phone = forms.CharField(max_length=20)
     same_as_billing = forms.BooleanField(required=False)
 
 

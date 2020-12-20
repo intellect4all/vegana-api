@@ -14,18 +14,19 @@ class ProductAdmin(admin.ModelAdmin):
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     '''Admin View for Category'''
-
-    list_display = ('name',)
+    list_display = ('name', 'slug')
     search_fields = ('name',)
+    
 
 @admin.register(Tag)
 class TagAdmin(admin.ModelAdmin):
     '''Admin View for Tag'''
 
-    list_display = ('name',)
-    search_fields = ('name',)
+    list_display = ('name', 'slug')
+    search_fields = ('name', 'slug')
     verbose_name = 'Tag'
     verbose_name_plural = 'Tags'
+    readonly_fields = ('slug',)
 
 
 @admin.register(OrderItem)

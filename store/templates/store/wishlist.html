@@ -1,6 +1,9 @@
 {% extends 'component/base.html' %}
 {% load static %}
 
+{% block title %}
+  <title>Wishlist - Vegana</title>
+{% endblock title %}
 
 {% block content %}
 
@@ -88,9 +91,7 @@
               <a href="{% url 'store:home' %}" class="btn btn-inline">
                 <i class="fas fa-undo-alt"></i> <span>Continue Shopping</span>
               </a>
-              <a href="checkout.html" class="btn btn-inline">
-                <i class="fas fa-check"></i> <span>Proceed to Checkout</span>
-              </a>
+              
             </div>
           </div>
         </div>

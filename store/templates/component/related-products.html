@@ -1,5 +1,8 @@
 {% load static %}
 
+
+{% if related.exists %}
+  
 <section class="section related-part">
     <div class="container">
       <div class="row">
@@ -15,206 +18,49 @@
       <div class="row">
         <div class="col-lg-12">
           <div class="product-slider slider-arrow">
+            {% for product in related  %}
             <div class="product-card">
               <div class="product-img">
-                <img src="../assets/images/product/01.png" alt="product-1" />
+                <img src="{{product.featured_image.url}}" alt="product-1" />
                 <ul class="product-widget">
                   <li>
-                    <button><i class="fas fa-eye"></i></button>
+                    <button><a href="{{product.get_absolute_url}}"><i class="fas fa-eye"></i></a></button>
                   </li>
                   <li>
-                    <button><i class="fas fa-heart"></i></button>
+                    <button><a href="{% url 'store:add-to-wishlist' product.slug %}"><i class="fas fa-heart"></i></a></button>
                   </li>
                   <li>
-                    <button><i class="fas fa-exchange-alt"></i></button>
+                    <button><a href="{% url 'store:add-to-cart' product.slug %}"><i class="fas fa-exchange-alt"></i></a></button>
                   </li>
                 </ul>
               </div>
               <div class="product-content">
                 <div class="product-name">
-                  <h6><a href="#">Heirloom Quinoa</a></h6>
+                  <h6><a href="{{product.get_absolute_url}}">{{product.name}}</a></h6>
                 </div>
                 <div class="product-price">
-                  <h6><del>$80</del> $150</h6>
+                  {% if product.discount_price %}
+                    <h6><del>#{{product.actual_price}}</del> #{{product.discount_price}}</h6>
+                    {% else %}
+                    <h6>#{{product.actual_price}}</h6>
+                  {% endif %}
                   <div class="product-rating">
                     <i class="fas fa-star"></i> <span>4.5/2</span>
                   </div>
                 </div>
                 <div class="product-btn">
-                  <a href="#">
+                  <a href="{% url 'store:add-to-cart' product.slug %}">
                     <i class="fas fa-shopping-basket"></i>
                     <span>Add to Cart</span>
                   </a>
                 </div>
               </div>
-            </div>
-            <div class="product-card">
-              <div class="product-img">
-                <img src="../assets/images/product/02.png" alt="product-2" />
-                <ul class="product-widget">
-                  <li>
-                    <button><i class="fas fa-eye"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-heart"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-exchange-alt"></i></button>
-                  </li>
-                </ul>
-              </div>
-              <div class="product-content">
-                <div class="product-name">
-                  <h6><a href="#">Heirloom Quinoa</a></h6>
-                </div>
-                <div class="product-price">
-                  <h6><del>$80</del> $150</h6>
-                  <div class="product-rating">
-                    <i class="fas fa-star"></i> <span>4.5/2</span>
-                  </div>
-                </div>
-                <div class="product-btn">
-                  <a href="#">
-                    <i class="fas fa-shopping-basket"></i>
-                    <span>Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="product-card">
-              <div class="product-img">
-                <img src="../assets/images/product/03.png" alt="product-3" />
-                <ul class="product-widget">
-                  <li>
-                    <button><i class="fas fa-eye"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-heart"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-exchange-alt"></i></button>
-                  </li>
-                </ul>
-              </div>
-              <div class="product-content">
-                <div class="product-name">
-                  <h6><a href="#">Heirloom Quinoa</a></h6>
-                </div>
-                <div class="product-price">
-                  <h6><del>$80</del> $150</h6>
-                  <div class="product-rating">
-                    <i class="fas fa-star"></i> <span>4.5/2</span>
-                  </div>
-                </div>
-                <div class="product-btn">
-                  <a href="#">
-                    <i class="fas fa-shopping-basket"></i>
-                    <span>Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="product-card">
-              <div class="product-img">
-                <img src="../assets/images/product/04.png" alt="product-4" />
-                <ul class="product-widget">
-                  <li>
-                    <button><i class="fas fa-eye"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-heart"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-exchange-alt"></i></button>
-                  </li>
-                </ul>
-              </div>
-              <div class="product-content">
-                <div class="product-name">
-                  <h6><a href="#">Heirloom Quinoa</a></h6>
-                </div>
-                <div class="product-price">
-                  <h6><del>$80</del> $150</h6>
-                  <div class="product-rating">
-                    <i class="fas fa-star"></i> <span>4.5/2</span>
-                  </div>
-                </div>
-                <div class="product-btn">
-                  <a href="#">
-                    <i class="fas fa-shopping-basket"></i>
-                    <span>Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="product-card">
-              <div class="product-img">
-                <img src="assets/images/product/05.html" alt="product-5" />
-                <ul class="product-widget">
-                  <li>
-                    <button><i class="fas fa-eye"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-heart"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-exchange-alt"></i></button>
-                  </li>
-                </ul>
-              </div>
-              <div class="product-content">
-                <div class="product-name">
-                  <h6><a href="#">Heirloom Quinoa</a></h6>
-                </div>
-                <div class="product-price">
-                  <h6><del>$80</del> $150</h6>
-                  <div class="product-rating">
-                    <i class="fas fa-star"></i> <span>4.5/2</span>
-                  </div>
-                </div>
-                <div class="product-btn">
-                  <a href="#">
-                    <i class="fas fa-shopping-basket"></i>
-                    <span>Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="product-card">
-              <div class="product-img">
-                <img src="../assets/images/product/05.png" alt="product-5" />
-                <ul class="product-widget">
-                  <li>
-                    <button><i class="fas fa-eye"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-heart"></i></button>
-                  </li>
-                  <li>
-                    <button><i class="fas fa-exchange-alt"></i></button>
-                  </li>
-                </ul>
-              </div>
-              <div class="product-content">
-                <div class="product-name">
-                  <h6><a href="#">Heirloom Quinoa</a></h6>
-                </div>
-                <div class="product-price">
-                  <h6><del>$80</del> $150</h6>
-                  <div class="product-rating">
-                    <i class="fas fa-star"></i> <span>4.5/2</span>
-                  </div>
-                </div>
-                <div class="product-btn">
-                  <a href="#">
-                    <i class="fas fa-shopping-basket"></i>
-                    <span>Add to Cart</span>
-                  </a>
-                </div>
-              </div>
-            </div>
+            </div>  
+            {% endfor %}
           </div>
         </div>
       </div>
     </div>
   </section>
+
+{% endif %}

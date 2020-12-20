@@ -14,7 +14,11 @@
     />
     <link rel="stylesheet" href="{% static 'assets/source/css/vendor/all.min.css' %}" />
 
-    <title>Vegana - Home</title>
+
+    {% block title %}
+      
+    {% endblock title %}
+    
     <link rel="icon" href="{% static 'assets/images/logo/favicon.png' %}" />
     <link rel="stylesheet" href="{% static 'assets/source/css/vendor/flaticon.css' %}" />
     <link rel="stylesheet" href="{% static 'assets/source/css/vendor/fontawesome.css' %}" />
