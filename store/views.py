@@ -66,7 +66,10 @@ def ProductDetails(request, slug):
 
 class Contact(View):
     def get(self, *args, **kwargs):
-        pass
+        context = {
+
+        }
+        return render(self.request, 'store/contact.html', context)
     
     def post(self, *args, **kwargs):
         pass
