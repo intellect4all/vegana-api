@@ -66,8 +66,9 @@ def ProductDetails(request, slug):
 
 class Contact(View):
     def get(self, *args, **kwargs):
+        all_categories = Category.objects.all()
         context = {
-
+            'all_categories': all_categories
         }
         return render(self.request, 'store/contact.html', context)
     

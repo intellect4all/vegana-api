@@ -1,0 +1,1 @@
+web: gunicorn vegana.wsgi --log-file -

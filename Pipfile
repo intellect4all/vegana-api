@@ -8,6 +8,8 @@ django = "*"
 pillow = "*"
 django-allauth = "*"
 django-phonenumber-field = {extras = ["phonenumbers"], version = "*"}
+gunicorn = "*"
+whitenoise = "*"
 
 [dev-packages]
 pylama = "*"
