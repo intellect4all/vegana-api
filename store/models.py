@@ -59,6 +59,7 @@ class Product(models.Model):
             return self.discount_price
         else:
             return self.actual_price
+
     
 
 class OrderItem(models.Model):
